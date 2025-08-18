@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>City Wide - Post-Construction Cleaning Calculator</title>
+    <style>
+        :root {
+            --primary-blue: #1E3A8A;
+            --secondary-blue: #3B82F6;
+            --accent-red: #DC2626;
+            --dark-gray: #374151;
+            --light-gray: #F3F4F6;
+            --success-green: #059669;
+            --white: #FFFFFF;
+            --warning-yellow: #F59E0B;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            color: var(--dark-gray);
+            line-height: 1.6;
+            background: var(--light-gray);
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            color: var(--white);
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--light-gray);
+        }
+
+        .card h3 {
+            color: var(--dark-gray);
+            margin: 1rem 0;
+            font-size: 1.1rem;
+        }
+
+        /* Phase Selection Section */
+        .phase-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .phase-card {
+            border: 2px solid var(--light-gray);
+            border-radius: 8px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .phase-card.selected {
+            border-color: var(--secondary-blue);
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .phase-card h4 {
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .phase-checkbox {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Cost Provider Toggle Section */
+        .cost-provider-section {
+            background: var(--light-gray);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .toggle-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .toggle-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .toggle-group label {
+            font-weight: 600;
+            color: var(--dark-gray);
+        }
+
+        .toggle-buttons {
+            display: flex;
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid #D1D5DB;
+        }
+
+        .toggle-buttons button {
+            flex: 1;
+            padding: 0.5rem;
+            border: none;
+            background: var(--white);
+            color: var(--dark-gray);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .vendor-btn.active {
+            background: var(--accent-red);
+            color: var(--white);
+        }
+
+        .inhouse-btn.active {
+            background: var(--success-green);
+            color: var(--white);
+        }
+
+        /* Input Sections */
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .input-group label {
+            font-weight: 600;
+            color: var(--dark-gray);
+            font-size: 0.9rem;
+        }
+
+        .input-group input,
+        .input-group select {
+            padding: 0.75rem;
+            border: 1px solid #D1D5DB;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: var(--secondary-blue);
+        }
+
+        /* Checklist Sections */
+        .checklist-container {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid var(--light-gray);
+            border-radius: 4px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+            background: var(--light-gray);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .checklist-item:hover {
+            background: #E5E7EB;
+        }
+
+        .checklist-item input[type="checkbox"] {
+            margin-right: 0.75rem;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .checklist-item label {
+            cursor: pointer;
+            flex: 1;
+        }
+
+        /* IC Rate Breakdown */
+        .ic-breakdown {
+            background: var(--light-gray);
+            border: 2px solid var(--secondary-blue);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .breakdown-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem;
+            background: var(--white);
+            border-radius: 4px;
+        }
+
+        .breakdown-item .label {
+            font-weight: 500;
+            color: var(--dark-gray);
+        }
+
+        .breakdown-item .value {
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+
+        /* Results Section */
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .result-card {
+            background: var(--white);
+            border: 2px solid var(--light-gray);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .result-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .result-card.highlight {
+            border-color: var(--accent-red);
+            background: rgba(220, 38, 38, 0.05);
+        }
+
+        .result-card h4 {
+            color: var(--dark-gray);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .result-card .value {
+            color: var(--primary-blue);
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 0.5rem 0;
+        }
+
+        .result-card.highlight .value {
+            color: var(--accent-red);
+        }
+
+        .result-card .subtitle {
+            color: #6B7280;
+            font-size: 0.85rem;
+        }
+
+        /* Phase Summary Cards */
+        .phase-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .phase-summary-card {
+            background: linear-gradient(135deg, var(--light-gray) 0%, var(--white) 100%);
+            border-left: 4px solid var(--secondary-blue);
+            padding: 1rem;
+            border-radius: 4px;
+        }
+
+        .phase-summary-card h4 {
+            color: var(--primary-blue);
+            margin-bottom: 0.75rem;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.25rem 0;
+            font-size: 0.95rem;
+        }
+
+        /* Export Buttons */
+        .export-section {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .export-btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: var(--white);
+        }
+
+        .export-btn.vendor {
+            background: var(--secondary-blue);
+        }
+
+        .export-btn.client {
+            background: var(--primary-blue);
+        }
+
+        .export-btn.fsm {
+            background: var(--success-green);
+        }
+
+        .export-btn.scope {
+            background: var(--warning-yellow);
+        }
+
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        th {
+            background: var(--light-gray);
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .input-grid,
+            .results-grid,
+            .phase-selector {
+                grid-template-columns: 1fr;
+            }
+
+            .export-section {
+                flex-direction: column;
+            }
+
+            .export-btn {
+                width: 100%;
+            }
+        }
+
+        /* Utility Classes */
+        .mt-1 { margin-top: 0.5rem; }
+        .mt-2 { margin-top: 1rem; }
+        .mt-3 { margin-top: 1.5rem; }
+        .mb-1 { margin-bottom: 0.5rem; }
+        .mb-2 { margin-bottom: 1rem; }
+        .mb-3 { margin-bottom: 1.5rem; }
+        .text-center { text-align: center; }
+        .font-bold { font-weight: 700; }
+        .text-small { font-size: 0.85rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>City Wide Post-Construction Cleaning Calculator</h1>
+        <p>Comprehensive Pricing for Commercial Properties - All Three Phases</p>
+    </header>
+
+    <div class="container">
+        <!-- Phase Selection Section -->
+        <div class="card">
+            <h2>Phase Selection & Project Details</h2>
+            
+            <div class="phase-selector">
+                <div class="phase-card" onclick="togglePhase('rough')">
+                    <input type="checkbox" class="phase-checkbox" id="phaseRough" checked>
+                    <h4>Phase 1: Rough Clean</h4>
+                    <p class="text-small">Initial debris removal, sweeping, and basic preparation</p>
+                    <p class="text-small"><strong>Timeline:</strong> 40-50% of project</p>
+                    <p class="text-small"><strong>Rate:</strong> 200-300 sq ft/hour</p>
+                </div>
+                
+                <div class="phase-card" onclick="togglePhase('final')">
+                    <input type="checkbox" class="phase-checkbox" id="phaseFinal" checked>
+                    <h4>Phase 2: Final Clean</h4>
+                    <p class="text-small">Detailed cleaning, windows, floors, fixtures</p>
+                    <p class="text-small"><strong>Timeline:</strong> 40-45% of project</p>
+                    <p class="text-small"><strong>Rate:</strong> 150-250 sq ft/hour</p>
+                </div>
+                
+                <div class="phase-card" onclick="togglePhase('touchup')">
+                    <input type="checkbox" class="phase-checkbox" id="phaseTouchup" checked>
+                    <h4>Phase 3: Touch-Up</h4>
+                    <p class="text-small">Final details, spot cleaning, inspection prep</p>
+                    <p class="text-small"><strong>Timeline:</strong> 10-15% of project</p>
+                    <p class="text-small"><strong>Rate:</strong> 300-400 sq ft/hour</p>
+                </div>
+            </div>
+
+            <div class="input-grid">
+                <div class="input-group">
+                    <label for="squareFootage">Total Square Footage</label>
+                    <input type="number" id="squareFootage" value="25000" min="1000" step="500" onchange="updateCalculations()">
+                </div>
+                
+                <div class="input-group">
+                    <label for="buildingType">Building Type</label>
+                    <select id="buildingType" onchange="updateCalculations()">
+                        <option value="office">Standard Office Building</option>
+                        <option value="medical">Medical/Healthcare Facility</option>
+                        <option value="retail">Retail/Commercial Space</option>
+                        <option value="industrial">Industrial/Warehouse</option>
+                        <option value="education">Educational Facility</option>
+                        <option value="hospitality">Hotel/Hospitality</option>
+                        <option value="datacenter">Data Center/Tech Facility</option>
+                        <option value="highend">Class A/Luxury Office</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label for="buildingCondition">Post-Construction Condition</label>
+                    <select id="buildingCondition" onchange="updateCalculations()">
+                        <option value="light">Light - Minimal dust/debris</option>
+                        <option value="moderate" selected>Moderate - Standard construction mess</option>
+                        <option value="heavy">Heavy - Extensive debris/residue</option>
+                        <option value="extreme">Extreme - Major renovation debris</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label for="buildingComplexity">Building Complexity</label>
+                    <select id="buildingComplexity" onchange="updateCalculations()">
+                        <option value="simple">Simple - Open floor plan, easy access</option>
+                        <option value="moderate" selected>Moderate - Some obstacles, standard layout</option>
+                        <option value="complex">Complex - Multiple rooms, difficult access</option>
+                        <option value="verycomplex">Very Complex - High ceilings, specialized areas</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label for="floors">Number of Floors</label>
+                    <input type="number" id="floors" value="1" min="1" max="100" onchange="updateCalculations()">
+                </div>
+                
+                <div class="input-group">
+                    <label for="timeOfService">Service Schedule</label>
+                    <select id="timeOfService" onchange="updateCalculations()">
+                        <option value="normal">Normal Hours (6am-6pm)</option>
+                        <option value="evening">Evening (6pm-12am) +15%</option>
+                        <option value="overnight">Overnight (12am-6am) +25%</option>
+                        <option value="weekend">Weekend +20%</option>
+                        <option value="emergency">Emergency/Rush +35%</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cost Provider Toggle Section -->
+        <div class="card">
+            <h2>Cost Provider Selection</h2>
+            <div class="cost-provider-section">
+                <div class="toggle-grid">
+                    <div class="toggle-group">
+                        <label>Labor Provider</label>
+                        <div class="toggle-buttons">
+                            <button class="vendor-btn active" data-category="labor" onclick="toggleProvider('labor', 'vendor')">Vendor</button>
+                            <button class="inhouse-btn" data-category="labor" onclick="toggleProvider('labor', 'inhouse')">In-House</button>
+                        </div>
+                    </div>
+                    
+                    <div class="toggle-group">
+                        <label>Equipment Provider</label>
+                        <div class="toggle-buttons">
+                            <button class="vendor-btn active" data-category="equipment" onclick="toggleProvider('equipment', 'vendor')">Vendor</button>
+                            <button class="inhouse-btn" data-category="equipment" onclick="toggleProvider('equipment', 'inhouse')">In-House</button>
+                        </div>
+                    </div>
+                    
+                    <div class="toggle-group">
+                        <label>Chemicals/Supplies</label>
+                        <div class="toggle-buttons">
+                            <button class="vendor-btn active" data-category="supplies" onclick="toggleProvider('supplies', 'vendor')">Vendor</button>
+                            <button class="inhouse-btn" data-category="supplies" onclick="toggleProvider('supplies', 'inhouse')">In-House</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 1: Rough Clean Checklist -->
+        <div class="card" id="roughCleanSection">
+            <h2>Phase 1: Rough Clean Scope</h2>
+            <div class="checklist-container">
+                <div class="checklist-item">
+                    <input type="checkbox" id="rough1" checked>
+                    <label for="rough1">Remove all construction debris and trash</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="rough2" checked>
+                    <label for="rough2">Clear protective coverings from floors and surfaces</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="rough3" checked>
+                    <label for="rough3">Initial HEPA vacuum all floors and surfaces</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="rough4" checked>
+                    <label for="rough4">Remove adhesive residue and stickers</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="rough5" checked>
+                    <label for="rough5">Sweep and clear stairwells</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="rough6" checked>
+                    <label for="rough6">Remove paint overspray from floors</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="rough7" checked>
+                    <label for="rough7">Clear and organize construction materials</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="rough8">
+                    <label for="rough8">Initial dust removal from horizontal surfaces</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="rough9">
+                    <label for="rough9">Clear HVAC vents of visible debris</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="rough10">
+                    <label for="rough10">Establish safe access routes throughout facility</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 2: Final Clean Checklist -->
+        <div class="card" id="finalCleanSection">
+            <h2>Phase 2: Final Clean Scope</h2>
+            <div class="checklist-container">
+                <div class="checklist-item">
+                    <input type="checkbox" id="final1" checked>
+                    <label for="final1">Interior window cleaning (all glass surfaces)</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="final2" checked>
+                    <label for="final2">Exterior window cleaning (ground level)</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="final3">
+                    <label for="final3">Exterior window cleaning (high-rise/lifts required)</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="final4" checked>
+                    <label for="final4">Strip and seal hard floors</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="final5">
+                    <label for="final5">Apply floor wax/finish (5 coats)</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="final6" checked>
+                    <label for="final6">Deep clean and sanitize all restrooms</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="final7" checked>
+                    <label for="final7">Detail clean all light fixtures</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="final8" checked>
+                    <label for="final8">Clean and polish all metal surfaces</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="final9" checked>
+                    <label for="final9">HVAC vent and diffuser cleaning</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="final10" checked>
+                    <label for="final10">Clean all doors, frames, and hardware</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="final11" checked>
+                    <label for="final11">Kitchen/break room deep clean and appliance detailing</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="final12">
+                    <label for="final12">Elevator cab cleaning and polishing</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="final13">
+                    <label for="final13">Carpet cleaning/shampooing</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="final14">
+                    <label for="final14">High dusting (ceilings, beams, light fixtures)</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="final15" checked>
+                    <label for="final15">Sanitize all touchpoints and surfaces</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 3: Touch-Up Checklist -->
+        <div class="card" id="touchupSection">
+            <h2>Phase 3: Touch-Up Scope</h2>
+            <div class="checklist-container">
+                <div class="checklist-item">
+                    <input type="checkbox" id="touchup1" checked>
+                    <label for="touchup1">Final dust removal from all surfaces</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="touchup2" checked>
+                    <label for="touchup2">Spot clean windows and glass</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="touchup3" checked>
+                    <label for="touchup3">Touch-up floor cleaning and buffing</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="touchup4" checked>
+                    <label for="touchup4">Final vacuum all carpeted areas</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="touchup5" checked>
+                    <label for="touchup5">Clean and stock restroom dispensers</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="touchup6" checked>
+                    <label for="touchup6">Remove any fingerprints from surfaces</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="touchup7" checked>
+                    <label for="touchup7">Final inspection preparation</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="touchup8">
+                    <label for="touchup8">Place entrance mats and protective coverings</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="touchup9">
+                    <label for="touchup9">Client walkthrough support</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="touchup10">
+                    <label for="touchup10">Create punch list for any remaining items</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Labor & Equipment Section -->
+        <div class="card">
+            <h2>Labor & Equipment Configuration</h2>
+            
+            <h3>Crew Configuration</h3>
+            <div class="input-grid">
+                <div class="input-group">
+                    <label for="crewSize">Standard Crew Size</label>
+                    <select id="crewSize" onchange="updateCalculations()">
+                        <option value="2">2 Person Crew</option>
+                        <option value="3">3 Person Crew</option>
+                        <option value="4" selected>4 Person Crew</option>
+                        <option value="6">6 Person Crew</option>
+                        <option value="8">8 Person Crew</option>
+                        <option value="10">10 Person Crew</option>
+                        <option value="15">15 Person Crew</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label for="supervisors">Number of Supervisors</label>
+                    <input type="number" id="supervisors" value="1" min="1" max="5" onchange="updateCalculations()">
+                </div>
+                
+                <div class="input-group">
+                    <label for="specialists">Specialist Workers</label>
+                    <input type="number" id="specialists" value="0" min="0" max="5" onchange="updateCalculations()">
+                </div>
+            </div>
+
+            <h3>Labor Rates</h3>
+            <div class="input-grid">
+                <div class="input-group">
+                    <label for="laborRate">Base Labor Rate ($/hour)</label>
+                    <input type="number" id="laborRate" value="18.00" min="15" max="35" step="0.50" onchange="updateCalculations()">
+                </div>
+                
+                <div class="input-group">
+                    <label for="supervisorRate">Supervisor Rate ($/hour)</label>
+                    <input type="number" id="supervisorRate" value="23.00" min="20" max="40" step="0.50" onchange="updateCalculations()">
+                </div>
+                
+                <div class="input-group">
+                    <label for="specialistRate">Specialist Rate ($/hour)</label>
+                    <input type="number" id="specialistRate" value="25.00" min="20" max="45" step="0.50" onchange="updateCalculations()">
+                </div>
+                
+                <div class="input-group">
+                    <label for="stateTax">State Income Tax (%)</label>
+                    <input type="number" id="stateTax" value="0.00" min="0" max="15" step="0.1" onchange="updateCalculations()">
+                </div>
+            </div>
+
+            <!-- IC Rate Breakdown -->
+            <div class="ic-breakdown">
+                <h3>Independent Contractor Rate Breakdown</h3>
+                <div class="breakdown-grid">
+                    <div class="breakdown-item">
+                        <span class="label">Base Rate:</span>
+                        <span class="value" id="breakdownBase">$18.00</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="label">FICA (7.65%):</span>
+                        <span class="value" id="breakdownFICA">$1.38</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="label">FUTA (0.60%):</span>
+                        <span class="value" id="breakdownFUTA">$0.11</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="label">Work Comp (2.50%):</span>
+                        <span class="value" id="breakdownWC">$0.45</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="label">GL (0.50%):</span>
+                        <span class="value" id="breakdownGL">$0.09</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="label">State Tax:</span>
+                        <span class="value" id="breakdownState">$0.00</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="label">Supplies/Chemicals (10%):</span>
+                        <span class="value" id="breakdownSupplies">$1.80</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="label">Subtotal:</span>
+                        <span class="value" id="breakdownSubtotal">$21.83</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="label">IC Profit (10%):</span>
+                        <span class="value" id="breakdownICProfit">$2.18</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="label">IC Loaded Rate:</span>
+                        <span class="value" id="breakdownLoaded">$24.01</span>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Equipment Requirements</h3>
+            <div class="input-grid">
+                <div class="input-group">
+                    <label for="hepaVacuums">HEPA Vacuums Needed</label>
+                    <input type="number" id="hepaVacuums" value="2" min="1" max="10" onchange="updateCalculations()">
+                </div>
+                
+                <div class="input-group">
+                    <label for="floorScrubbers">Floor Scrubbers</label>
+                    <select id="floorScrubbers" onchange="updateCalculations()">
+                        <option value="0">None</option>
+                        <option value="1" selected>1 Walk-Behind</option>
+                        <option value="2">2 Walk-Behind</option>
+                        <option value="1r">1 Ride-On</option>
+                        <option value="2r">2 Ride-On</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label for="lifts">Lifts Required</label>
+                    <select id="lifts" onchange="updateCalculations()">
+                        <option value="none">None</option>
+                        <option value="scissor">Scissor Lift</option>
+                        <option value="boom">Boom Lift</option>
+                        <option value="both">Both Types</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label for="pressureWasher">Pressure Washer</label>
+                    <select id="pressureWasher" onchange="updateCalculations()">
+                        <option value="no">No</option>
+                        <option value="yes">Yes - Hot Water</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label for="windowEquipment">Window Cleaning System</label>
+                    <select id="windowEquipment" onchange="updateCalculations()">
+                        <option value="basic">Basic Squeegees</option>
+                        <option value="pole" selected>Water-Fed Pole System</option>
+                        <option value="both">Both Systems</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Materials & Supplies Section -->
+        <div class="card">
+            <h2>Materials & Supplies</h2>
+            
+            <div class="input-grid">
+                <div class="input-group">
+                    <label for="stripperPrice">Floor Stripper ($/gallon concentrate)</label>
+                    <input type="number" id="stripperPrice" value="15.00" min="10" max="50" step="1" onchange="updateCalculations()">
+                </div>
+                
+                <div class="input-group">
+                    <label for="finishPrice">Floor Finish ($/gallon)</label>
+                    <input type="number" id="finishPrice" value="45.00" min="20" max="120" step="5" onchange="updateCalculations()">
+                </div>
+                
+                <div class="input-group">
+                    <label for="finishCoats">Number of Finish Coats</label>
+                    <input type="number" id="finishCoats" value="5" min="3" max="7" onchange="updateCalculations()">
+                </div>
+                
+                <div class="input-group">
+                    <label for="cleanerPrice">All-Purpose Cleaner ($/gallon)</label>
+                    <input type="number" id="cleanerPrice" value="8.00" min="5" max="25" step="1" onchange="updateCalculations()">
+                </div>
+                
+                <div class="input-group">
+                    <label for="glassCleanerPrice">Glass Cleaner ($/gallon)</label>
+                    <input type="number" id="glassCleanerPrice" value="6.00" min="4" max="20" step="1" onchange="updateCalculations()">
+                </div>
+                
+                <div class="input-group">
+                    <label for="suppliesCost">Disposable Supplies ($/1000 sq ft)</label>
+                    <input type="number" id="suppliesCost" value="15.00" min="10" max="50" step="5" onchange="updateCalculations()">
+                </div>
+            </div>
+        </div>
+
+        <!-- City Wide Margin Section -->
+        <div class="card">
+            <h2>City Wide Pricing Configuration</h2>
+            
+            <div class="input-grid">
+                <div class="input-group">
+                    <label for="cityWideMargin">City Wide Margin (%)</label>
+                    <input type="number" id="cityWideMargin" value="35" min="20" max="60" step="1" onchange="updateCalculations()">
+                </div>
+                
+                <div class="input-group">
+                    <label for="icProfit">IC Profit & Overhead (%)</label>
+                    <input type="number" id="icProfit" value="10" min="5" max="25" step="1" onchange="updateCalculations()">
+                </div>
+                
+                <div class="input-group">
+                    <label for="region">Regional Adjustment</label>
+                    <select id="region" onchange="updateCalculations()">
+                        <option value="rural">Rural (-25%)</option>
+                        <option value="suburban">Suburban (-10%)</option>
+                        <option value="standard" selected>Standard Market</option>
+                        <option value="urban">Urban (+15%)</option>
+                        <option value="major">Major Metro (+25%)</option>
+                        <option value="nyc">NYC/SF Market (+35%)</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label for="competitionLevel">Competition Level</label>
+                    <select id="competitionLevel" onchange="updateCalculations()">
+                        <option value="low">Low - Premium pricing</option>
+                        <option value="moderate" selected>Moderate - Market rates</option>
+                        <option value="high">High - Competitive pricing</option>
+                        <option value="aggressive">Aggressive - Win the bid</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase-by-Phase Results -->
+        <div class="card">
+            <h2>Phase-by-Phase Breakdown</h2>
+            
+            <div class="phase-summary">
+                <div class="phase-summary-card">
+                    <h4>Phase 1: Rough Clean</h4>
+                    <div class="summary-row">
+                        <span>Labor Hours:</span>
+                        <span id="roughHours">125</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Production Rate:</span>
+                        <span id="roughRate">250 sq ft/hr</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Labor Cost:</span>
+                        <span id="roughLabor">$2,500</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Equipment Cost:</span>
+                        <span id="roughEquipment">$500</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Materials Cost:</span>
+                        <span id="roughMaterials">$250</span>
+                    </div>
+                    <div class="summary-row">
+                        <span><strong>Phase Total:</strong></span>
+                        <span><strong id="roughTotal">$3,250</strong></span>
+                    </div>
+                </div>
+                
+                <div class="phase-summary-card">
+                    <h4>Phase 2: Final Clean</h4>
+                    <div class="summary-row">
+                        <span>Labor Hours:</span>
+                        <span id="finalHours">150</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Production Rate:</span>
+                        <span id="finalRate">200 sq ft/hr</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Labor Cost:</span>
+                        <span id="finalLabor">$3,000</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Equipment Cost:</span>
+                        <span id="finalEquipment">$750</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Materials Cost:</span>
+                        <span id="finalMaterials">$1,250</span>
+                    </div>
+                    <div class="summary-row">
+                        <span><strong>Phase Total:</strong></span>
+                        <span><strong id="finalTotal">$5,000</strong></span>
+                    </div>
+                </div>
+                
+                <div class="phase-summary-card">
+                    <h4>Phase 3: Touch-Up</h4>
+                    <div class="summary-row">
+                        <span>Labor Hours:</span>
+                        <span id="touchupHours">75</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Production Rate:</span>
+                        <span id="touchupRate">350 sq ft/hr</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Labor Cost:</span>
+                        <span id="touchupLabor">$1,500</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Equipment Cost:</span>
+                        <span id="touchupEquipment">$250</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Materials Cost:</span>
+                        <span id="touchupMaterials">$150</span>
+                    </div>
+                    <div class="summary-row">
+                        <span><strong>Phase Total:</strong></span>
+                        <span><strong id="touchupTotal">$1,900</strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Overall Results -->
+        <div class="card">
+            <h2>Total Project Pricing</h2>
+            
+            <div class="results-grid">
+                <div class="result-card">
+                    <h4>Total Labor Hours</h4>
+                    <div class="value" id="totalHours">350</div>
+                    <div class="subtitle">All phases combined</div>
+                </div>
+                
+                <div class="result-card">
+                    <h4>Total Days</h4>
+                    <div class="value" id="totalDays">11</div>
+                    <div class="subtitle">With 4-person crew</div>
+                </div>
+                
+                <div class="result-card">
+                    <h4>Labor Cost</h4>
+                    <div class="value" id="totalLabor">$7,000</div>
+                    <div class="subtitle">All crew members</div>
+                </div>
+                
+                <div class="result-card">
+                    <h4>Equipment Cost</h4>
+                    <div class="value" id="totalEquipment">$1,500</div>
+                    <div class="subtitle">Rental & depreciation</div>
+                </div>
+                
+                <div class="result-card">
+                    <h4>Materials Cost</h4>
+                    <div class="value" id="totalMaterials">$1,650</div>
+                    <div class="subtitle">Chemicals & supplies</div>
+                </div>
+                
+                <div class="result-card">
+                    <h4>Total Cost to CW</h4>
+                    <div class="value" id="totalCostToCW">$10,150</div>
+                    <div class="subtitle">Before margin</div>
+                </div>
+                
+                <div class="result-card">
+                    <h4>Price Per Sq Ft</h4>
+                    <div class="value" id="pricePerSqFt">$0.63</div>
+                    <div class="subtitle">All phases</div>
+                </div>
+                
+                <div class="result-card highlight">
+                    <h4>Final Client Price</h4>
+                    <div class="value" id="clientPrice">$15,615</div>
+                    <div class="subtitle">With 35% margin</div>
+                </div>
+                
+                <div class="result-card highlight">
+                    <h4>CW Gross Profit</h4>
+                    <div class="value" id="grossProfit">$5,465</div>
+                    <div class="subtitle">35% margin</div>
+                </div>
+                
+                <div class="result-card">
+                    <h4>Vendor Payment</h4>
+                    <div class="value" id="vendorPayment">$11,165</div>
+                    <div class="subtitle">With IC profit</div>
+                </div>
+                
+                <div class="result-card">
+                    <h4>Per Phase Price</h4>
+                    <div class="value" id="perPhaseAvg">$5,205</div>
+                    <div class="subtitle">Average per phase</div>
+                </div>
+                
+                <div class="result-card">
+                    <h4>Profit Margin %</h4>
+                    <div class="value" id="profitPercent">35%</div>
+                    <div class="subtitle">City Wide margin</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Export Options -->
+        <div class="card">
+            <h2>Export Options</h2>
+            <div class="export-section">
+                <button class="export-btn vendor" onclick="exportVendorSpecs()">
+                    Export Vendor Specifications
+                </button>
+                <button class="export-btn client" onclick="exportClientInstructions()">
+                    Export Client Instructions
+                </button>
+                <button class="export-btn fsm" onclick="exportFSMSummary()">
+                    Export FSM Job Summary
+                </button>
+                <button class="export-btn scope" onclick="generateScope()">
+                    Generate Project Scope
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global state for provider selections
+        let providers = {
+            labor: 'vendor',
+            equipment: 'vendor',
+            supplies: 'vendor'
+        };
+
+        // Phase selections
+        let phases = {
+            rough: true,
+            final: true,
+            touchup: true
+        };
+
+        // Production rates by building type and condition
+        const productionRates = {
+            rough: {
+                office: { light: 300, moderate: 250, heavy: 200, extreme: 150 },
+                medical: { light: 250, moderate: 200, heavy: 150, extreme: 125 },
+                retail: { light: 325, moderate: 275, heavy: 225, extreme: 175 },
+                industrial: { light: 350, moderate: 300, heavy: 250, extreme: 200 },
+                education: { light: 275, moderate: 225, heavy: 175, extreme: 150 },
+                hospitality: { light: 250, moderate: 200, heavy: 150, extreme: 125 },
+                datacenter: { light: 200, moderate: 150, heavy: 125, extreme: 100 },
+                highend: { light: 225, moderate: 175, heavy: 150, extreme: 125 }
+            },
+            final: {
+                office: { light: 250, moderate: 200, heavy: 150, extreme: 125 },
+                medical: { light: 200, moderate: 150, heavy: 125, extreme: 100 },
+                retail: { light: 275, moderate: 225, heavy: 175, extreme: 150 },
+                industrial: { light: 300, moderate: 250, heavy: 200, extreme: 175 },
+                education: { light: 225, moderate: 175, heavy: 150, extreme: 125 },
+                hospitality: { light: 200, moderate: 150, heavy: 125, extreme: 100 },
+                datacenter: { light: 150, moderate: 125, heavy: 100, extreme: 75 },
+                highend: { light: 175, moderate: 150, heavy: 125, extreme: 100 }
+            },
+            touchup: {
+                office: { light: 450, moderate: 375, heavy: 300, extreme: 250 },
+                medical: { light: 400, moderate: 325, heavy: 250, extreme: 200 },
+                retail: { light: 475, moderate: 400, heavy: 325, extreme: 275 },
+                industrial: { light: 500, moderate: 425, heavy: 350, extreme: 300 },
+                education: { light: 425, moderate: 350, heavy: 275, extreme: 225 },
+                hospitality: { light: 400, moderate: 325, heavy: 250, extreme: 200 },
+                datacenter: { light: 350, moderate: 275, heavy: 225, extreme: 175 },
+                highend: { light: 375, moderate: 300, heavy: 250, extreme: 200 }
+            }
+        };
+
+        function togglePhase(phase) {
+            phases[phase] = !phases[phase];
+            document.getElementById(`phase${phase.charAt(0).toUpperCase() + phase.slice(1)}`).checked = phases[phase];
+            
+            // Update phase card styling
+            const cards = document.querySelectorAll('.phase-card');
+            cards.forEach(card => {
+                const checkbox = card.querySelector('.phase-checkbox');
+                if (checkbox.checked) {
+                    card.classList.add('selected');
+                } else {
+                    card.classList.remove('selected');
+                }
+            });
+            
+            // Show/hide phase sections
+            if (phase === 'rough') {
+                document.getElementById('roughCleanSection').style.display = phases.rough ? 'block' : 'none';
+            } else if (phase === 'final') {
+                document.getElementById('finalCleanSection').style.display = phases.final ? 'block' : 'none';
+            } else if (phase === 'touchup') {
+                document.getElementById('touchupSection').style.display = phases.touchup ? 'block' : 'none';
+            }
+            
+            updateCalculations();
+        }
+
+        function toggleProvider(category, type) {
+            providers[category] = type;
+            
+            // Update button styling
+            const vendorBtn = document.querySelector(`[data-category="${category}"].vendor-btn`);
+            const inhouseBtn = document.querySelector(`[data-category="${category}"].inhouse-btn`);
+            
+            if (type === 'vendor') {
+                vendorBtn.classList.add('active');
+                inhouseBtn.classList.remove('active');
+            } else {
+                vendorBtn.classList.remove('active');
+                inhouseBtn.classList.add('active');
+            }
+            
+            updateCalculations();
+        }
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(amount);
+        }
+
+        function formatCurrencyDetailed(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }).format(amount);
+        }
+
+        function updateICBreakdown() {
+            const baseRate = parseFloat(document.getElementById('laborRate').value) || 18;
+            const stateTax = parseFloat(document.getElementById('stateTax').value) || 0;
+            const icProfit = parseFloat(document.getElementById('icProfit').value) || 10;
+            
+            const fica = baseRate * 0.0765;
+            const futa = baseRate * 0.006;
+            const workComp = baseRate * 0.025;
+            const gl = baseRate * 0.005;
+            const stateTaxAmount = baseRate * (stateTax / 100);
+            const suppliesChemicals = baseRate * 0.10; // 10% for basic supplies and chemicals
+            
+            const subtotal = baseRate + fica + futa + workComp + gl + stateTaxAmount + suppliesChemicals;
+            const icProfitAmount = subtotal * (icProfit / 100);
+            const loadedRate = subtotal + icProfitAmount;
+            
+            document.getElementById('breakdownBase').textContent = formatCurrencyDetailed(baseRate);
+            document.getElementById('breakdownFICA').textContent = formatCurrencyDetailed(fica);
+            document.getElementById('breakdownFUTA').textContent = formatCurrencyDetailed(futa);
+            document.getElementById('breakdownWC').textContent = formatCurrencyDetailed(workComp);
+            document.getElementById('breakdownGL').textContent = formatCurrencyDetailed(gl);
+            document.getElementById('breakdownState').textContent = formatCurrencyDetailed(stateTaxAmount);
+            document.getElementById('breakdownSupplies').textContent = formatCurrencyDetailed(suppliesChemicals);
+            document.getElementById('breakdownSubtotal').textContent = formatCurrencyDetailed(subtotal);
+            document.getElementById('breakdownICProfit').textContent = formatCurrencyDetailed(icProfitAmount);
+            document.getElementById('breakdownLoaded').textContent = formatCurrencyDetailed(loadedRate);
+            
+            return { subtotal, loadedRate };
+        }
+
+        function calculatePhaseHours(phase, sqft, buildingType, condition, complexity) {
+            const baseRate = productionRates[phase][buildingType][condition];
+            
+            // Adjust for complexity
+            let complexityMultiplier = 1;
+            switch(complexity) {
+                case 'simple': complexityMultiplier = 1.1; break;
+                case 'moderate': complexityMultiplier = 1.0; break;
+                case 'complex': complexityMultiplier = 0.9; break;
+                case 'verycomplex': complexityMultiplier = 0.8; break;
+            }
+            
+            // Adjust for multiple floors
+            const floors = parseInt(document.getElementById('floors').value) || 1;
+            const floorMultiplier = 1 - ((floors - 1) * 0.05); // 5% reduction per floor
+            
+            const adjustedRate = baseRate * complexityMultiplier * Math.max(floorMultiplier, 0.7);
+            const hours = sqft / adjustedRate;
+            
+            return { hours, rate: adjustedRate };
+        }
+
+        function calculateEquipmentCost(phase, days) {
+            const hepaVacuums = parseInt(document.getElementById('hepaVacuums').value) || 2;
+            const floorScrubbers = document.getElementById('floorScrubbers').value;
+            const lifts = document.getElementById('lifts').value;
+            const pressureWasher = document.getElementById('pressureWasher').value;
+            const windowEquipment = document.getElementById('windowEquipment').value;
+            
+            let dailyCost = 0;
+            
+            // HEPA Vacuums - $80/day each
+            dailyCost += hepaVacuums * 80;
+            
+            // Floor scrubbers
+            if (floorScrubbers === '1') dailyCost += 150;
+            else if (floorScrubbers === '2') dailyCost += 300;
+            else if (floorScrubbers === '1r') dailyCost += 250;
+            else if (floorScrubbers === '2r') dailyCost += 500;
+            
+            // Lifts
+            if (lifts === 'scissor') dailyCost += 250;
+            else if (lifts === 'boom') dailyCost += 500;
+            else if (lifts === 'both') dailyCost += 750;
+            
+            // Pressure washer
+            if (pressureWasher === 'yes') dailyCost += 100;
+            
+            // Window equipment
+            if (windowEquipment === 'pole') dailyCost += 50;
+            else if (windowEquipment === 'both') dailyCost += 75;
+            
+            // Phase-specific adjustments
+            let phaseMultiplier = 1;
+            if (phase === 'rough') phaseMultiplier = 0.6;
+            else if (phase === 'final') phaseMultiplier = 1.2;
+            else if (phase === 'touchup') phaseMultiplier = 0.4;
+            
+            return dailyCost * days * phaseMultiplier;
+        }
+
+        function calculateMaterialsCost(phase, sqft) {
+            const stripperPrice = parseFloat(document.getElementById('stripperPrice').value) || 15;
+            const finishPrice = parseFloat(document.getElementById('finishPrice').value) || 45;
+            const finishCoats = parseInt(document.getElementById('finishCoats').value) || 5;
+            const cleanerPrice = parseFloat(document.getElementById('cleanerPrice').value) || 8;
+            const glassCleanerPrice = parseFloat(document.getElementById('glassCleanerPrice').value) || 6;
+            const suppliesCost = parseFloat(document.getElementById('suppliesCost').value) || 15;
+            
+            let totalCost = 0;
+            
+            if (phase === 'rough') {
+                // Basic supplies only
+                totalCost = (sqft / 1000) * suppliesCost * 0.5;
+            } else if (phase === 'final') {
+                // Check which services are selected
+                const stripFloors = document.getElementById('final4').checked;
+                const waxFloors = document.getElementById('final5').checked;
+                
+                if (stripFloors) {
+                    // Stripper at 600 sq ft coverage per gallon
+                    totalCost += (sqft / 600) * stripperPrice;
+                }
+                
+                if (waxFloors) {
+                    // Finish at 2000 sq ft coverage per gallon, multiple coats
+                    totalCost += (sqft / 2000) * finishPrice * finishCoats;
+                }
+                
+                // All-purpose cleaner
+                totalCost += (sqft / 5000) * cleanerPrice;
+                
+                // Glass cleaner (estimate 10% of square footage is glass)
+                totalCost += (sqft * 0.1 / 1000) * glassCleanerPrice;
+                
+                // Supplies
+                totalCost += (sqft / 1000) * suppliesCost;
+            } else if (phase === 'touchup') {
+                // Minimal materials
+                totalCost = (sqft / 1000) * suppliesCost * 0.3;
+            }
+            
+            return totalCost;
+        }
+
+        function updateCalculations() {
+            updateICBreakdown();
+            
+            const sqft = parseFloat(document.getElementById('squareFootage').value) || 25000;
+            const buildingType = document.getElementById('buildingType').value;
+            const condition = document.getElementById('buildingCondition').value;
+            const complexity = document.getElementById('buildingComplexity').value;
+            const crewSize = parseInt(document.getElementById('crewSize').value) || 4;
+            const supervisors = parseInt(document.getElementById('supervisors').value) || 1;
+            const specialists = parseInt(document.getElementById('specialists').value) || 0;
+            const timeOfService = document.getElementById('timeOfService').value;
+            const region = document.getElementById('region').value;
+            const competitionLevel = document.getElementById('competitionLevel').value;
+            const cityWideMargin = parseFloat(document.getElementById('cityWideMargin').value) || 35;
+            
+            
+            // Labor rates
+            const laborRate = parseFloat(document.getElementById('laborRate').value) || 18;
+            const supervisorRate = parseFloat(document.getElementById('supervisorRate').value) || 23;
+            const specialistRate = parseFloat(document.getElementById('specialistRate').value) || 25;
+            
+            // Get loaded rates
+            const { loadedRate } = updateICBreakdown();
+            const supervisorLoaded = supervisorRate * 1.25; // Simplified for supervisors
+            const specialistLoaded = specialistRate * 1.3; // Simplified for specialists
+            
+            // Time of service multiplier
+            let timeMultiplier = 1;
+            switch(timeOfService) {
+                case 'evening': timeMultiplier = 1.15; break;
+                case 'overnight': timeMultiplier = 1.25; break;
+                case 'weekend': timeMultiplier = 1.20; break;
+                case 'emergency': timeMultiplier = 1.35; break;
+            }
+            
+            // Regional multiplier
+            let regionalMultiplier = 1;
+            switch(region) {
+                case 'rural': regionalMultiplier = 0.75; break;
+                case 'suburban': regionalMultiplier = 0.90; break;
+                case 'urban': regionalMultiplier = 1.15; break;
+                case 'major': regionalMultiplier = 1.25; break;
+                case 'nyc': regionalMultiplier = 1.35; break;
+            }
+            
+            // Competition adjustment
+            let competitionAdjustment = 1;
+            switch(competitionLevel) {
+                case 'low': competitionAdjustment = 1.10; break;
+                case 'high': competitionAdjustment = 0.95; break;
+                case 'aggressive': competitionAdjustment = 0.90; break;
+            }
+            
+            // Calculate for each phase
+            let totalHours = 0;
+            let totalLaborCost = 0;
+            let totalEquipmentCost = 0;
+            let totalMaterialsCost = 0;
+            
+            // Phase 1: Rough Clean
+            if (phases.rough) {
+                const rough = calculatePhaseHours('rough', sqft, buildingType, condition, complexity);
+                const roughDays = Math.ceil(rough.hours / (crewSize * 8));
+                
+                // Calculate labor cost
+                const regularWorkers = Math.max(crewSize - supervisors - specialists,
