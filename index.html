@@ -197,43 +197,6 @@
             border-color: var(--secondary-blue);
         }
 
-        /* Checklist Sections */
-        .checklist-container {
-            max-height: 400px;
-            overflow-y: auto;
-            border: 1px solid var(--light-gray);
-            border-radius: 4px;
-            padding: 1rem;
-            margin: 1rem 0;
-        }
-
-        .checklist-item {
-            display: flex;
-            align-items: center;
-            padding: 0.5rem;
-            margin-bottom: 0.5rem;
-            background: var(--light-gray);
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .checklist-item:hover {
-            background: #E5E7EB;
-        }
-
-        .checklist-item input[type="checkbox"] {
-            margin-right: 0.75rem;
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-        }
-
-        .checklist-item label {
-            cursor: pointer;
-            flex: 1;
-        }
-
         /* IC Rate Breakdown */
         .ic-breakdown {
             background: var(--light-gray);
@@ -386,25 +349,6 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
 
-        /* Tables */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 1rem 0;
-        }
-
-        th, td {
-            padding: 0.75rem;
-            text-align: left;
-            border-bottom: 1px solid var(--light-gray);
-        }
-
-        th {
-            background: var(--light-gray);
-            font-weight: 600;
-            color: var(--primary-blue);
-        }
-
         /* Responsive Design */
         @media (max-width: 768px) {
             header h1 {
@@ -454,7 +398,7 @@
             <h2>Phase Selection & Project Details</h2>
             
             <div class="phase-selector">
-                <div class="phase-card" onclick="togglePhase('rough')">
+                <div class="phase-card selected" onclick="togglePhase('rough')">
                     <input type="checkbox" class="phase-checkbox" id="phaseRough" checked>
                     <h4>Phase 1: Rough Clean</h4>
                     <p class="text-small">Initial debris removal, sweeping, and basic preparation</p>
@@ -462,7 +406,7 @@
                     <p class="text-small"><strong>Rate:</strong> 200-300 sq ft/hour</p>
                 </div>
                 
-                <div class="phase-card" onclick="togglePhase('final')">
+                <div class="phase-card selected" onclick="togglePhase('final')">
                     <input type="checkbox" class="phase-checkbox" id="phaseFinal" checked>
                     <h4>Phase 2: Final Clean</h4>
                     <p class="text-small">Detailed cleaning, windows, floors, fixtures</p>
@@ -470,7 +414,7 @@
                     <p class="text-small"><strong>Rate:</strong> 150-250 sq ft/hour</p>
                 </div>
                 
-                <div class="phase-card" onclick="togglePhase('touchup')">
+                <div class="phase-card selected" onclick="togglePhase('touchup')">
                     <input type="checkbox" class="phase-checkbox" id="phaseTouchup" checked>
                     <h4>Phase 3: Touch-Up</h4>
                     <p class="text-small">Final details, spot cleaning, inspection prep</p>
@@ -569,167 +513,6 @@
             </div>
         </div>
 
-        <!-- Phase 1: Rough Clean Checklist -->
-        <div class="card" id="roughCleanSection">
-            <h2>Phase 1: Rough Clean Scope</h2>
-            <div class="checklist-container">
-                <div class="checklist-item">
-                    <input type="checkbox" id="rough1" checked>
-                    <label for="rough1">Remove all construction debris and trash</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="rough2" checked>
-                    <label for="rough2">Clear protective coverings from floors and surfaces</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="rough3" checked>
-                    <label for="rough3">Initial HEPA vacuum all floors and surfaces</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="rough4" checked>
-                    <label for="rough4">Remove adhesive residue and stickers</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="rough5" checked>
-                    <label for="rough5">Sweep and clear stairwells</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="rough6" checked>
-                    <label for="rough6">Remove paint overspray from floors</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="rough7" checked>
-                    <label for="rough7">Clear and organize construction materials</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="rough8">
-                    <label for="rough8">Initial dust removal from horizontal surfaces</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="rough9">
-                    <label for="rough9">Clear HVAC vents of visible debris</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="rough10">
-                    <label for="rough10">Establish safe access routes throughout facility</label>
-                </div>
-            </div>
-        </div>
-
-        <!-- Phase 2: Final Clean Checklist -->
-        <div class="card" id="finalCleanSection">
-            <h2>Phase 2: Final Clean Scope</h2>
-            <div class="checklist-container">
-                <div class="checklist-item">
-                    <input type="checkbox" id="final1" checked>
-                    <label for="final1">Interior window cleaning (all glass surfaces)</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="final2" checked>
-                    <label for="final2">Exterior window cleaning (ground level)</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="final3">
-                    <label for="final3">Exterior window cleaning (high-rise/lifts required)</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="final4" checked>
-                    <label for="final4">Strip and seal hard floors</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="final5">
-                    <label for="final5">Apply floor wax/finish (5 coats)</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="final6" checked>
-                    <label for="final6">Deep clean and sanitize all restrooms</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="final7" checked>
-                    <label for="final7">Detail clean all light fixtures</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="final8" checked>
-                    <label for="final8">Clean and polish all metal surfaces</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="final9" checked>
-                    <label for="final9">HVAC vent and diffuser cleaning</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="final10" checked>
-                    <label for="final10">Clean all doors, frames, and hardware</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="final11" checked>
-                    <label for="final11">Kitchen/break room deep clean and appliance detailing</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="final12">
-                    <label for="final12">Elevator cab cleaning and polishing</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="final13">
-                    <label for="final13">Carpet cleaning/shampooing</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="final14">
-                    <label for="final14">High dusting (ceilings, beams, light fixtures)</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="final15" checked>
-                    <label for="final15">Sanitize all touchpoints and surfaces</label>
-                </div>
-            </div>
-        </div>
-
-        <!-- Phase 3: Touch-Up Checklist -->
-        <div class="card" id="touchupSection">
-            <h2>Phase 3: Touch-Up Scope</h2>
-            <div class="checklist-container">
-                <div class="checklist-item">
-                    <input type="checkbox" id="touchup1" checked>
-                    <label for="touchup1">Final dust removal from all surfaces</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="touchup2" checked>
-                    <label for="touchup2">Spot clean windows and glass</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="touchup3" checked>
-                    <label for="touchup3">Touch-up floor cleaning and buffing</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="touchup4" checked>
-                    <label for="touchup4">Final vacuum all carpeted areas</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="touchup5" checked>
-                    <label for="touchup5">Clean and stock restroom dispensers</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="touchup6" checked>
-                    <label for="touchup6">Remove any fingerprints from surfaces</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="touchup7" checked>
-                    <label for="touchup7">Final inspection preparation</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="touchup8">
-                    <label for="touchup8">Place entrance mats and protective coverings</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="touchup9">
-                    <label for="touchup9">Client walkthrough support</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="touchup10">
-                    <label for="touchup10">Create punch list for any remaining items</label>
-                </div>
-            </div>
-        </div>
-
         <!-- Labor & Equipment Section -->
         <div class="card">
             <h2>Labor & Equipment Configuration</h2>
@@ -751,7 +534,7 @@
                 
                 <div class="input-group">
                     <label for="supervisors">Number of Supervisors</label>
-                    <input type="number" id="supervisors" value="1" min="1" max="5" onchange="updateCalculations()">
+                    <input type="number" id="supervisors" value="1" min="0" max="5" onchange="updateCalculations()">
                 </div>
                 
                 <div class="input-group">
@@ -812,20 +595,16 @@
                         <span class="value" id="breakdownState">$0.00</span>
                     </div>
                     <div class="breakdown-item">
-                        <span class="label">Supplies/Chemicals (10%):</span>
-                        <span class="value" id="breakdownSupplies">$1.80</span>
-                    </div>
-                    <div class="breakdown-item">
                         <span class="label">Subtotal:</span>
-                        <span class="value" id="breakdownSubtotal">$21.83</span>
+                        <span class="value" id="breakdownSubtotal">$20.03</span>
                     </div>
                     <div class="breakdown-item">
                         <span class="label">IC Profit (10%):</span>
-                        <span class="value" id="breakdownICProfit">$2.18</span>
+                        <span class="value" id="breakdownICProfit">$2.00</span>
                     </div>
                     <div class="breakdown-item">
                         <span class="label">IC Loaded Rate:</span>
-                        <span class="value" id="breakdownLoaded">$24.01</span>
+                        <span class="value" id="breakdownLoaded">$22.03</span>
                     </div>
                 </div>
             </div>
@@ -1158,6 +937,9 @@
             touchup: true
         };
 
+        // Store calculation results for exports
+        let calculationResults = {};
+
         // Production rates by building type and condition
         const productionRates = {
             rough: {
@@ -1192,29 +974,32 @@
             }
         };
 
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            // Set initial phase card states
+            document.querySelectorAll('.phase-card').forEach(card => {
+                card.classList.add('selected');
+            });
+            updateCalculations();
+        });
+
         function togglePhase(phase) {
             phases[phase] = !phases[phase];
-            document.getElementById(`phase${phase.charAt(0).toUpperCase() + phase.slice(1)}`).checked = phases[phase];
+            const checkbox = document.getElementById(`phase${phase.charAt(0).toUpperCase() + phase.slice(1)}`);
+            checkbox.checked = phases[phase];
             
             // Update phase card styling
             const cards = document.querySelectorAll('.phase-card');
-            cards.forEach(card => {
-                const checkbox = card.querySelector('.phase-checkbox');
-                if (checkbox.checked) {
-                    card.classList.add('selected');
-                } else {
-                    card.classList.remove('selected');
+            cards.forEach((card, index) => {
+                const phaseNames = ['rough', 'final', 'touchup'];
+                if (phaseNames[index] === phase) {
+                    if (phases[phase]) {
+                        card.classList.add('selected');
+                    } else {
+                        card.classList.remove('selected');
+                    }
                 }
             });
-            
-            // Show/hide phase sections
-            if (phase === 'rough') {
-                document.getElementById('roughCleanSection').style.display = phases.rough ? 'block' : 'none';
-            } else if (phase === 'final') {
-                document.getElementById('finalCleanSection').style.display = phases.final ? 'block' : 'none';
-            } else if (phase === 'touchup') {
-                document.getElementById('touchupSection').style.display = phases.touchup ? 'block' : 'none';
-            }
             
             updateCalculations();
         }
@@ -1223,16 +1008,14 @@
             providers[category] = type;
             
             // Update button styling
-            const vendorBtn = document.querySelector(`[data-category="${category}"].vendor-btn`);
-            const inhouseBtn = document.querySelector(`[data-category="${category}"].inhouse-btn`);
-            
-            if (type === 'vendor') {
-                vendorBtn.classList.add('active');
-                inhouseBtn.classList.remove('active');
-            } else {
-                vendorBtn.classList.remove('active');
-                inhouseBtn.classList.add('active');
-            }
+            const buttons = document.querySelectorAll(`[data-category="${category}"]`);
+            buttons.forEach(btn => {
+                if (btn.classList.contains(`${type}-btn`)) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
             
             updateCalculations();
         }
@@ -1265,9 +1048,8 @@
             const workComp = baseRate * 0.025;
             const gl = baseRate * 0.005;
             const stateTaxAmount = baseRate * (stateTax / 100);
-            const suppliesChemicals = baseRate * 0.10; // 10% for basic supplies and chemicals
             
-            const subtotal = baseRate + fica + futa + workComp + gl + stateTaxAmount + suppliesChemicals;
+            const subtotal = baseRate + fica + futa + workComp + gl + stateTaxAmount;
             const icProfitAmount = subtotal * (icProfit / 100);
             const loadedRate = subtotal + icProfitAmount;
             
@@ -1277,7 +1059,6 @@
             document.getElementById('breakdownWC').textContent = formatCurrencyDetailed(workComp);
             document.getElementById('breakdownGL').textContent = formatCurrencyDetailed(gl);
             document.getElementById('breakdownState').textContent = formatCurrencyDetailed(stateTaxAmount);
-            document.getElementById('breakdownSupplies').textContent = formatCurrencyDetailed(suppliesChemicals);
             document.getElementById('breakdownSubtotal').textContent = formatCurrencyDetailed(subtotal);
             document.getElementById('breakdownICProfit').textContent = formatCurrencyDetailed(icProfitAmount);
             document.getElementById('breakdownLoaded').textContent = formatCurrencyDetailed(loadedRate);
@@ -1360,19 +1141,11 @@
                 // Basic supplies only
                 totalCost = (sqft / 1000) * suppliesCost * 0.5;
             } else if (phase === 'final') {
-                // Check which services are selected
-                const stripFloors = document.getElementById('final4').checked;
-                const waxFloors = document.getElementById('final5').checked;
+                // Stripper at 600 sq ft coverage per gallon
+                totalCost += (sqft / 600) * stripperPrice;
                 
-                if (stripFloors) {
-                    // Stripper at 600 sq ft coverage per gallon
-                    totalCost += (sqft / 600) * stripperPrice;
-                }
-                
-                if (waxFloors) {
-                    // Finish at 2000 sq ft coverage per gallon, multiple coats
-                    totalCost += (sqft / 2000) * finishPrice * finishCoats;
-                }
+                // Finish at 2000 sq ft coverage per gallon, multiple coats
+                totalCost += (sqft / 2000) * finishPrice * finishCoats;
                 
                 // All-purpose cleaner
                 totalCost += (sqft / 5000) * cleanerPrice;
@@ -1404,7 +1177,6 @@
             const region = document.getElementById('region').value;
             const competitionLevel = document.getElementById('competitionLevel').value;
             const cityWideMargin = parseFloat(document.getElementById('cityWideMargin').value) || 35;
-            
             
             // Labor rates
             const laborRate = parseFloat(document.getElementById('laborRate').value) || 18;
@@ -1454,5 +1226,569 @@
                 const rough = calculatePhaseHours('rough', sqft, buildingType, condition, complexity);
                 const roughDays = Math.ceil(rough.hours / (crewSize * 8));
                 
-                // Calculate labor cost
-                const regularWorkers = Math.max(crewSize - supervisors - specialists,
+                // Calculate labor cost with crew composition
+                const regularWorkers = Math.max(crewSize - supervisors - specialists, 0);
+                const averageRate = (
+                    (regularWorkers * loadedRate) +
+                    (supervisors * supervisorLoaded) +
+                    (specialists * specialistLoaded)
+                ) / crewSize;
+                
+                const roughLaborCost = rough.hours * averageRate * timeMultiplier;
+                
+                const roughEquipment = calculateEquipmentCost('rough', roughDays);
+                const roughMaterials = calculateMaterialsCost('rough', sqft);
+                
+                document.getElementById('roughHours').textContent = Math.round(rough.hours);
+                document.getElementById('roughRate').textContent = Math.round(rough.rate) + ' sq ft/hr';
+                document.getElementById('roughLabor').textContent = formatCurrency(roughLaborCost);
+                document.getElementById('roughEquipment').textContent = formatCurrency(roughEquipment);
+                document.getElementById('roughMaterials').textContent = formatCurrency(roughMaterials);
+                document.getElementById('roughTotal').textContent = formatCurrency(roughLaborCost + roughEquipment + roughMaterials);
+                
+                totalHours += rough.hours;
+                totalLaborCost += roughLaborCost;
+                totalEquipmentCost += roughEquipment;
+                totalMaterialsCost += roughMaterials;
+            } else {
+                document.getElementById('roughHours').textContent = '0';
+                document.getElementById('roughRate').textContent = 'N/A';
+                document.getElementById('roughLabor').textContent = '$0';
+                document.getElementById('roughEquipment').textContent = '$0';
+                document.getElementById('roughMaterials').textContent = '$0';
+                document.getElementById('roughTotal').textContent = '$0';
+            }
+            
+            // Phase 2: Final Clean
+            if (phases.final) {
+                const final = calculatePhaseHours('final', sqft, buildingType, condition, complexity);
+                const finalDays = Math.ceil(final.hours / (crewSize * 8));
+                
+                const regularWorkers = Math.max(crewSize - supervisors - specialists, 0);
+                const averageRate = (
+                    (regularWorkers * loadedRate) +
+                    (supervisors * supervisorLoaded) +
+                    (specialists * specialistLoaded)
+                ) / crewSize;
+                
+                const finalLaborCost = final.hours * averageRate * timeMultiplier;
+                
+                const finalEquipment = calculateEquipmentCost('final', finalDays);
+                const finalMaterials = calculateMaterialsCost('final', sqft);
+                
+                document.getElementById('finalHours').textContent = Math.round(final.hours);
+                document.getElementById('finalRate').textContent = Math.round(final.rate) + ' sq ft/hr';
+                document.getElementById('finalLabor').textContent = formatCurrency(finalLaborCost);
+                document.getElementById('finalEquipment').textContent = formatCurrency(finalEquipment);
+                document.getElementById('finalMaterials').textContent = formatCurrency(finalMaterials);
+                document.getElementById('finalTotal').textContent = formatCurrency(finalLaborCost + finalEquipment + finalMaterials);
+                
+                totalHours += final.hours;
+                totalLaborCost += finalLaborCost;
+                totalEquipmentCost += finalEquipment;
+                totalMaterialsCost += finalMaterials;
+            } else {
+                document.getElementById('finalHours').textContent = '0';
+                document.getElementById('finalRate').textContent = 'N/A';
+                document.getElementById('finalLabor').textContent = '$0';
+                document.getElementById('finalEquipment').textContent = '$0';
+                document.getElementById('finalMaterials').textContent = '$0';
+                document.getElementById('finalTotal').textContent = '$0';
+            }
+            
+            // Phase 3: Touch-Up
+            if (phases.touchup) {
+                const touchup = calculatePhaseHours('touchup', sqft, buildingType, condition, complexity);
+                const touchupDays = Math.ceil(touchup.hours / (crewSize * 8));
+                
+                const regularWorkers = Math.max(crewSize - supervisors - specialists, 0);
+                const averageRate = (
+                    (regularWorkers * loadedRate) +
+                    (supervisors * supervisorLoaded) +
+                    (specialists * specialistLoaded)
+                ) / crewSize;
+                
+                const touchupLaborCost = touchup.hours * averageRate * timeMultiplier;
+                
+                const touchupEquipment = calculateEquipmentCost('touchup', touchupDays);
+                const touchupMaterials = calculateMaterialsCost('touchup', sqft);
+                
+                document.getElementById('touchupHours').textContent = Math.round(touchup.hours);
+                document.getElementById('touchupRate').textContent = Math.round(touchup.rate) + ' sq ft/hr';
+                document.getElementById('touchupLabor').textContent = formatCurrency(touchupLaborCost);
+                document.getElementById('touchupEquipment').textContent = formatCurrency(touchupEquipment);
+                document.getElementById('touchupMaterials').textContent = formatCurrency(touchupMaterials);
+                document.getElementById('touchupTotal').textContent = formatCurrency(touchupLaborCost + touchupEquipment + touchupMaterials);
+                
+                totalHours += touchup.hours;
+                totalLaborCost += touchupLaborCost;
+                totalEquipmentCost += touchupEquipment;
+                totalMaterialsCost += touchupMaterials;
+            } else {
+                document.getElementById('touchupHours').textContent = '0';
+                document.getElementById('touchupRate').textContent = 'N/A';
+                document.getElementById('touchupLabor').textContent = '$0';
+                document.getElementById('touchupEquipment').textContent = '$0';
+                document.getElementById('touchupMaterials').textContent = '$0';
+                document.getElementById('touchupTotal').textContent = '$0';
+            }
+            
+            // Apply provider logic
+            if (providers.labor === 'vendor') {
+                totalLaborCost *= 1.10; // Add IC profit for vendor
+            }
+            if (providers.equipment === 'vendor') {
+                totalEquipmentCost *= 1.10;
+            }
+            if (providers.supplies === 'vendor') {
+                totalMaterialsCost *= 1.10;
+            }
+            
+            // Apply regional and competition adjustments
+            totalLaborCost *= regionalMultiplier * competitionAdjustment;
+            totalEquipmentCost *= regionalMultiplier * competitionAdjustment;
+            totalMaterialsCost *= regionalMultiplier * competitionAdjustment;
+            
+            // Calculate totals
+            const totalCostToCW = totalLaborCost + totalEquipmentCost + totalMaterialsCost;
+            const clientPrice = totalCostToCW / (1 - cityWideMargin / 100);
+            const grossProfit = clientPrice - totalCostToCW;
+            const vendorPayment = totalCostToCW;
+            const totalDays = Math.ceil(totalHours / (crewSize * 8));
+            const pricePerSqFt = clientPrice / sqft;
+            const perPhaseAvg = clientPrice / Object.values(phases).filter(p => p).length;
+            
+            // Update display
+            document.getElementById('totalHours').textContent = Math.round(totalHours);
+            document.getElementById('totalDays').textContent = totalDays;
+            document.getElementById('totalLabor').textContent = formatCurrency(totalLaborCost);
+            document.getElementById('totalEquipment').textContent = formatCurrency(totalEquipmentCost);
+            document.getElementById('totalMaterials').textContent = formatCurrency(totalMaterialsCost);
+            document.getElementById('totalCostToCW').textContent = formatCurrency(totalCostToCW);
+            document.getElementById('pricePerSqFt').textContent = formatCurrencyDetailed(pricePerSqFt);
+            document.getElementById('clientPrice').textContent = formatCurrency(clientPrice);
+            document.getElementById('grossProfit').textContent = formatCurrency(grossProfit);
+            document.getElementById('vendorPayment').textContent = formatCurrency(vendorPayment);
+            document.getElementById('perPhaseAvg').textContent = formatCurrency(perPhaseAvg);
+            document.getElementById('profitPercent').textContent = cityWideMargin + '%';
+            
+            // Store results for exports
+            calculationResults = {
+                sqft,
+                buildingType,
+                condition,
+                complexity,
+                crewSize,
+                totalHours,
+                totalDays,
+                totalLaborCost,
+                totalEquipmentCost,
+                totalMaterialsCost,
+                totalCostToCW,
+                clientPrice,
+                grossProfit,
+                vendorPayment,
+                pricePerSqFt,
+                cityWideMargin,
+                phases,
+                providers
+            };
+        }
+
+        // Export functions
+        function downloadRTF(content, filename) {
+            const blob = new Blob([content], { type: 'application/rtf' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        function exportVendorSpecs() {
+            const rtf = `{\\rtf1\\ansi\\deff0 {\\fonttbl{\\f0 Times New Roman;}}
+\\f0\\fs24
+{\\b VENDOR SPECIFICATIONS - POST-CONSTRUCTION CLEANING}\\line\\line
+Generated: ${new Date().toLocaleDateString()}\\line\\line
+
+{\\b PROJECT OVERVIEW}\\line
+Square Footage: ${calculationResults.sqft.toLocaleString()} sq ft\\line
+Building Type: ${document.getElementById('buildingType').selectedOptions[0].text}\\line
+Building Condition: ${document.getElementById('buildingCondition').selectedOptions[0].text}\\line
+Building Complexity: ${document.getElementById('buildingComplexity').selectedOptions[0].text}\\line
+Number of Floors: ${document.getElementById('floors').value}\\line\\line
+
+{\\b PHASES INCLUDED}\\line
+${phases.rough ? '- Phase 1: Rough Clean\\line' : ''}
+${phases.final ? '- Phase 2: Final Clean\\line' : ''}
+${phases.touchup ? '- Phase 3: Touch-Up Clean\\line' : ''}
+\\line
+
+{\\b LABOR REQUIREMENTS}\\line
+Total Labor Hours: ${Math.round(calculationResults.totalHours)} hours\\line
+Crew Size: ${calculationResults.crewSize} workers\\line
+Estimated Days: ${calculationResults.totalDays} days\\line
+Base Labor Rate: ${document.getElementById('laborRate').value}/hour\\line\\line
+
+{\\b EQUIPMENT NEEDED}\\line
+HEPA Vacuums: ${document.getElementById('hepaVacuums').value} units\\line
+Floor Scrubbers: ${document.getElementById('floorScrubbers').selectedOptions[0].text}\\line
+Lifts: ${document.getElementById('lifts').selectedOptions[0].text}\\line
+Pressure Washer: ${document.getElementById('pressureWasher').selectedOptions[0].text}\\line
+Window Equipment: ${document.getElementById('windowEquipment').selectedOptions[0].text}\\line\\line
+
+{\\b MATERIALS REQUIRED}\\line
+Floor Stripper: ${Math.ceil(calculationResults.sqft / 600)} gallons\\line
+Floor Finish: ${Math.ceil(calculationResults.sqft / 2000 * parseInt(document.getElementById('finishCoats').value))} gallons\\line
+All-Purpose Cleaner: ${Math.ceil(calculationResults.sqft / 5000)} gallons\\line
+Glass Cleaner: ${Math.ceil(calculationResults.sqft * 0.1 / 1000)} gallons\\line
+Disposable Supplies: Based on ${calculationResults.sqft.toLocaleString()} sq ft\\line\\line
+
+{\\b QUALITY STANDARDS}\\line
+- All surfaces must be free of construction dust and debris\\line
+- Windows cleaned inside and out to streak-free finish\\line
+- Floors stripped and refinished with ${document.getElementById('finishCoats').value} coats\\line
+- All fixtures, outlets, and switches cleaned and polished\\line
+- HVAC vents and returns vacuumed and wiped\\line
+- Light fixtures cleaned and bulbs replaced as needed\\line\\line
+
+{\\b SAFETY REQUIREMENTS}\\line
+- All workers must wear appropriate PPE\\line
+- HEPA filtration required for dust control\\line
+- Proper ventilation during chemical application\\line
+- Fall protection for work above 6 feet\\line
+- Current insurance certificates required\\line\\line
+
+{\\b COMPLETION TIMELINE}\\line
+Phase 1 (Rough): ${phases.rough ? Math.ceil(document.getElementById('roughHours').textContent / (calculationResults.crewSize * 8)) + ' days' : 'Not included'}\\line
+Phase 2 (Final): ${phases.final ? Math.ceil(document.getElementById('finalHours').textContent / (calculationResults.crewSize * 8)) + ' days' : 'Not included'}\\line
+Phase 3 (Touch-up): ${phases.touchup ? Math.ceil(document.getElementById('touchupHours').textContent / (calculationResults.crewSize * 8)) + ' days' : 'Not included'}\\line
+Total Project Duration: ${calculationResults.totalDays} working days\\line
+}`;
+            
+            downloadRTF(rtf, 'vendor-specifications.rtf');
+        }
+
+        function exportClientInstructions() {
+            const rtf = `{\\rtf1\\ansi\\deff0 {\\fonttbl{\\f0 Times New Roman;}}
+\\f0\\fs24
+{\\b CLIENT INSTRUCTIONS - POST-CONSTRUCTION CLEANING}\\line\\line
+Generated: ${new Date().toLocaleDateString()}\\line\\line
+
+{\\b SERVICE OVERVIEW}\\line
+City Wide will provide comprehensive post-construction cleaning services for your ${calculationResults.sqft.toLocaleString()} sq ft facility. Our three-phase approach ensures your space is move-in ready and exceeds industry standards.\\line\\line
+
+{\\b THREE-PHASE CLEANING PROCESS}\\line\\line
+
+${phases.rough ? `{\\b Phase 1: Rough Clean (40-50% of project time)}\\line
+- Remove all construction debris and trash\\line
+- Sweep and vacuum all surfaces\\line
+- Clean windows and frames (initial pass)\\line
+- Wipe down all surfaces to remove dust\\line
+- Clean and disinfect restrooms\\line\\line` : ''}
+
+${phases.final ? `{\\b Phase 2: Final Clean (40-45% of project time)}\\line
+- Strip and refinish all hard floors\\line
+- Deep clean all carpeted areas\\line
+- Detail clean all windows inside and out\\line
+- Clean and polish all fixtures and hardware\\line
+- Sanitize all touchpoints and surfaces\\line
+- Clean HVAC vents and returns\\line
+- Detail clean kitchens and break rooms\\line\\line` : ''}
+
+${phases.touchup ? `{\\b Phase 3: Touch-Up Clean (10-15% of project time)}\\line
+- Final inspection and quality check\\line
+- Spot clean any missed areas\\line
+- Final window cleaning and detailing\\line
+- Remove any fingerprints or smudges\\line
+- Prepare space for final walkthrough\\line\\line` : ''}
+
+{\\b CLIENT PREPARATION REQUIREMENTS}\\line
+- Ensure all construction work is complete\\line
+- Provide access to water and electricity\\line
+- Clear pathways for equipment movement\\line
+- Remove or secure valuable items\\line
+- Provide parking for crew vehicles\\line
+- Designate area for waste disposal\\line\\line
+
+{\\b TIMING AND SCHEDULING}\\line
+Service Schedule: ${document.getElementById('timeOfService').selectedOptions[0].text}\\line
+Estimated Duration: ${calculationResults.totalDays} working days\\line
+Crew Size: ${calculationResults.crewSize} trained professionals\\line\\line
+
+{\\b POST-SERVICE MAINTENANCE}\\line
+- Wait 24 hours before heavy foot traffic on newly finished floors\\line
+- Avoid wet mopping for 72 hours after floor finishing\\line
+- Use only pH-neutral cleaners on finished floors\\line
+- Schedule regular maintenance to preserve finish\\line
+- Keep HVAC filters clean to minimize dust\\line\\line
+
+{\\b QUALITY ASSURANCE}\\line
+- Pre-service walkthrough to identify specific concerns\\line
+- Daily progress reports during service\\line
+- Final inspection with client representative\\line
+- 48-hour callback guarantee for any issues\\line
+- Detailed completion certificate provided\\line\\line
+
+{\\b SAFETY MEASURES}\\line
+- All crew members are fully insured and bonded\\line
+- OSHA-compliant safety procedures followed\\line
+- Non-toxic, eco-friendly cleaning products available\\line
+- Proper ventilation maintained during service\\line\\line
+
+{\\b CONTACT INFORMATION}\\line
+For questions or concerns during service, please contact your City Wide Facility Solutions Manager.\\line
+Emergency after-hours support available.\\line
+}`;
+            
+            downloadRTF(rtf, 'client-instructions.rtf');
+        }
+
+        function exportFSMSummary() {
+            const rtf = `{\\rtf1\\ansi\\deff0 {\\fonttbl{\\f0 Times New Roman;}}
+\\f0\\fs24
+{\\b FACILITY SOLUTIONS MANAGER - COMPLETE JOB SUMMARY}\\line\\line
+Service: Post-Construction Cleaning\\line
+Location: ${calculationResults.sqft.toLocaleString()} sq ft ${document.getElementById('buildingType').selectedOptions[0].text}\\line
+Generated: ${new Date().toLocaleString()}\\line\\line
+
+{\\b\\fs28 JOB OVERVIEW}\\line\\line
+Square Footage: ${calculationResults.sqft.toLocaleString()} sq ft\\line
+Building Type: ${document.getElementById('buildingType').selectedOptions[0].text}\\line
+Post-Construction Condition: ${document.getElementById('buildingCondition').selectedOptions[0].text}\\line
+Complexity Level: ${document.getElementById('buildingComplexity').selectedOptions[0].text}\\line
+Number of Floors: ${document.getElementById('floors').value}\\line
+Service Schedule: ${document.getElementById('timeOfService').selectedOptions[0].text}\\line\\line
+
+Total Labor Hours: ${Math.round(calculationResults.totalHours)} hours\\line
+Recommended Crew Size: ${calculationResults.crewSize} workers\\line
+Project Duration: ${calculationResults.totalDays} days\\line\\line
+
+{\\b\\fs28 PRICING SUMMARY}\\line\\line
+{\\b Final Client Price: ${formatCurrency(calculationResults.clientPrice)}}\\line
+Total Vendor Payment: ${formatCurrency(calculationResults.vendorPayment)}\\line
+{\\b City Wide Gross Profit: ${formatCurrency(calculationResults.grossProfit)}}\\line
+City Wide Margin: ${calculationResults.cityWideMargin}%\\line
+Price Per Square Foot: ${formatCurrencyDetailed(calculationResults.pricePerSqFt)}\\line\\line
+
+{\\b\\fs28 VENDOR PAYMENT STRUCTURE}\\line\\line
+{\\b Cost Provider Selections:}\\line
+Labor: ${providers.labor === 'vendor' ? 'Vendor Provided (includes 10% IC profit)' : 'In-House (no IC profit)'}\\line
+Equipment: ${providers.equipment === 'vendor' ? 'Vendor Provided (includes 10% IC profit)' : 'In-House (no IC profit)'}\\line
+Supplies: ${providers.supplies === 'vendor' ? 'Vendor Provided (includes 10% IC profit)' : 'In-House (no IC profit)'}\\line\\line
+
+{\\b Labor Rate Breakdown:}\\line
+Base Rate: ${document.getElementById('laborRate').value}/hour\\line
+FICA (7.65%): ${(parseFloat(document.getElementById('laborRate').value) * 0.0765).toFixed(2)}\\line
+FUTA (0.60%): ${(parseFloat(document.getElementById('laborRate').value) * 0.006).toFixed(2)}\\line
+Work Comp (2.50%): ${(parseFloat(document.getElementById('laborRate').value) * 0.025).toFixed(2)}\\line
+GL (0.50%): ${(parseFloat(document.getElementById('laborRate').value) * 0.005).toFixed(2)}\\line
+State Tax: ${(parseFloat(document.getElementById('laborRate').value) * parseFloat(document.getElementById('stateTax').value) / 100).toFixed(2)}\\line
+${providers.labor === 'vendor' ? 'IC Profit (10%): Included\\line' : ''}
+\\line
+
+{\\b\\fs28 SITE CONDITIONS & CHALLENGES}\\line\\line
+- Condition: ${document.getElementById('buildingCondition').selectedOptions[0].text}\\line
+- Complexity: ${document.getElementById('buildingComplexity').selectedOptions[0].text}\\line
+- Multiple floors: ${document.getElementById('floors').value > 1 ? 'Yes - requires additional coordination' : 'No'}\\line
+- After-hours work: ${document.getElementById('timeOfService').value !== 'normal' ? 'Yes - premium rates apply' : 'No'}\\line
+- Regional market: ${document.getElementById('region').selectedOptions[0].text}\\line
+- Competition level: ${document.getElementById('competitionLevel').selectedOptions[0].text}\\line\\line
+
+{\\b\\fs28 VENDOR QUESTIONS TO ASK}\\line\\line
+1. Do you have experience with post-construction cleaning for ${document.getElementById('buildingType').selectedOptions[0].text} facilities?\\line
+2. Can you provide ${document.getElementById('hepaVacuums').value} HEPA vacuums and necessary equipment?\\line
+3. Do you have current general liability and workers comp insurance?\\line
+4. Can you commit to ${calculationResults.totalDays} consecutive days of work?\\line
+5. Do you have a crew of at least ${calculationResults.crewSize} trained workers available?\\line
+6. Are you familiar with floor stripping and refinishing procedures?\\line
+7. Do you have proper safety equipment for working at heights?\\line\\line
+
+{\\b\\fs28 CLIENT COMMUNICATION POINTS}\\line\\line
+{\\b Pre-Service:}\\line
+- Confirm all construction work is complete\\line
+- Ensure utilities are connected and operational\\line
+- Verify access to all areas requiring cleaning\\line
+- Discuss any specific areas of concern\\line\\line
+
+{\\b During Service:}\\line
+- Provide daily progress updates\\line
+- Address any unexpected conditions immediately\\line
+- Maintain clear communication channels\\line
+- Document work with before/after photos\\line\\line
+
+{\\b Post-Service:}\\line
+- Conduct thorough walkthrough with client\\line
+- Provide care and maintenance instructions\\line
+- Establish callback procedure for any issues\\line
+- Schedule follow-up quality check\\line\\line
+
+{\\b\\fs28 SCHEDULING CONSIDERATIONS}\\line\\line
+- Optimal timing: After all trades complete, before move-in\\line
+- Weather concerns: High humidity affects floor finish drying\\line
+- Coordination required with other contractors\\line
+- Allow 24-hour cure time for floor finish before occupancy\\line
+- ${document.getElementById('timeOfService').value !== 'normal' ? 'Special scheduling for after-hours work required\\line' : ''}
+- Consider phased approach if building partially occupied\\line\\line
+
+{\\b\\fs28 QUALITY ASSURANCE CHECKLIST}\\line\\line
+{\\b Phase 1 - Rough Clean:}\\line
+[ ] All construction debris removed\\line
+[ ] Surfaces swept and vacuumed\\line
+[ ] Windows cleaned (first pass)\\line
+[ ] Restrooms sanitized\\line\\line
+
+{\\b Phase 2 - Final Clean:}\\line
+[ ] Floors stripped and refinished\\line
+[ ] All windows cleaned inside/out\\line
+[ ] Fixtures polished\\line
+[ ] HVAC vents cleaned\\line
+[ ] Kitchen/break areas detailed\\line\\line
+
+{\\b Phase 3 - Touch-Up:}\\line
+[ ] Final inspection completed\\line
+[ ] Spot cleaning performed\\line
+[ ] Client walkthrough scheduled\\line
+[ ] Punch list items addressed\\line\\line
+
+{\\b\\fs28 PROFITABILITY ANALYSIS}\\line\\line
+Client Payment: ${formatCurrency(calculationResults.clientPrice)}\\line
+Less Vendor Payment: ${formatCurrency(calculationResults.vendorPayment)}\\line
+{\\b City Wide Profit: ${formatCurrency(calculationResults.grossProfit)}}\\line\\line
+
+{\\b Key Cost Drivers:}\\line
+- Labor: ${formatCurrency(calculationResults.totalLaborCost)} (${(calculationResults.totalLaborCost / calculationResults.totalCostToCW * 100).toFixed(1)}% of costs)\\line
+- Equipment: ${formatCurrency(calculationResults.totalEquipmentCost)} (${(calculationResults.totalEquipmentCost / calculationResults.totalCostToCW * 100).toFixed(1)}% of costs)\\line
+- Materials: ${formatCurrency(calculationResults.totalMaterialsCost)} (${(calculationResults.totalMaterialsCost / calculationResults.totalCostToCW * 100).toFixed(1)}% of costs)\\line\\line
+
+{\\b Risk Factors:}\\line
+- Condition worse than assessed\\line
+- Hidden areas requiring additional work\\line
+- Delays from other contractors\\line
+- Weather impacts on scheduling\\line
+- Quality callbacks\\line\\line
+
+{\\b Success Factors:}\\line
+- Experienced crew with proper equipment\\line
+- Clear communication with all parties\\line
+- Adequate time allocation per phase\\line
+- Quality control at each phase\\line
+- Proper floor finish application\\line
+}`;
+            
+            downloadRTF(rtf, 'fsm-job-summary.rtf');
+        }
+
+        function generateScope() {
+            const rtf = `{\\rtf1\\ansi\\deff0 {\\fonttbl{\\f0 Times New Roman;}}
+\\f0\\fs24
+{\\b PROJECT SCOPE - POST-CONSTRUCTION CLEANING}\\line\\line
+Project: ${calculationResults.sqft.toLocaleString()} sq ft ${document.getElementById('buildingType').selectedOptions[0].text}\\line
+Date: ${new Date().toLocaleDateString()}\\line\\line
+
+{\\b SCOPE OF WORK}\\line\\line
+
+This scope defines the post-construction cleaning services to be provided by City Wide Facility Solutions for the above-referenced project.\\line\\line
+
+{\\b 1. PROJECT DETAILS}\\line
+- Total Square Footage: ${calculationResults.sqft.toLocaleString()} sq ft\\line
+- Building Type: ${document.getElementById('buildingType').selectedOptions[0].text}\\line
+- Number of Floors: ${document.getElementById('floors').value}\\line
+- Current Condition: ${document.getElementById('buildingCondition').selectedOptions[0].text}\\line\\line
+
+{\\b 2. SERVICES INCLUDED}\\line\\line
+
+${phases.rough ? `{\\b Phase 1 - Rough Clean:}\\line
+- Remove all construction debris, trash, and packaging materials\\line
+- Sweep and vacuum all floor surfaces\\line
+- Dust all horizontal and vertical surfaces\\line
+- Clean windows and window frames (initial cleaning)\\line
+- Wipe down walls and remove marks/stains\\line
+- Clean and disinfect all restrooms\\line
+- Remove protective coverings from fixtures\\line\\line` : ''}
+
+${phases.final ? `{\\b Phase 2 - Final Clean:}\\line
+- Strip existing floor finish (if applicable)\\line
+- Apply ${document.getElementById('finishCoats').value} coats of commercial-grade floor finish\\line
+- Deep clean all carpeted areas with HEPA filtration\\line
+- Detail clean all windows, inside and outside\\line
+- Clean and polish all light fixtures\\line
+- Detail clean all doors, frames, and hardware\\line
+- Clean all HVAC vents, returns, and diffusers\\line
+- Sanitize all kitchens, break rooms, and appliances\\line
+- Clean and disinfect all restroom fixtures\\line
+- Polish all stainless steel and chrome surfaces\\line
+- Clean all baseboards and crown molding\\line
+- Vacuum and wipe all blinds/window treatments\\line\\line` : ''}
+
+${phases.touchup ? `{\\b Phase 3 - Touch-Up Clean:}\\line
+- Perform detailed quality inspection\\line
+- Address any areas requiring additional attention\\line
+- Remove fingerprints and smudges from all surfaces\\line
+- Final cleaning of windows and glass\\line
+- Touch-up floor finish as needed\\line
+- Prepare space for client inspection\\line
+- Complete final walkthrough checklist\\line\\line` : ''}
+
+{\\b 3. EQUIPMENT AND MATERIALS}\\line
+City Wide will provide all necessary equipment and materials including:\\line
+- HEPA-filtered vacuums (${document.getElementById('hepaVacuums').value} units)\\line
+- Floor scrubbing equipment\\line
+- Window cleaning systems\\line
+- All cleaning chemicals and supplies\\line
+- Safety equipment and PPE\\line
+- Floor finish and application equipment\\line\\line
+
+{\\b 4. TIMELINE}\\line
+- Start Date: TBD\\line
+- Duration: ${calculationResults.totalDays} working days\\line
+- Working Hours: ${document.getElementById('timeOfService').selectedOptions[0].text}\\line
+- Crew Size: ${calculationResults.crewSize} workers\\line\\line
+
+{\\b 5. PRICING}\\line
+Total Project Price: ${formatCurrency(calculationResults.clientPrice)}\\line
+Price Per Square Foot: ${formatCurrencyDetailed(calculationResults.pricePerSqFt)}\\line
+Payment Terms: Net 30\\line\\line
+
+{\\b 6. EXCLUSIONS}\\line
+The following items are NOT included in this scope:\\line
+- Removal of hazardous materials\\line
+- Exterior building washing\\line
+- Carpet replacement or repair\\line
+- Painting or drywall repair\\line
+- Electrical or plumbing work\\line
+- Disposal fees exceeding normal construction debris\\line\\line
+
+{\\b 7. CLIENT RESPONSIBILITIES}\\line
+- Provide access to all areas requiring cleaning\\line
+- Ensure utilities (water, electricity) are operational\\line
+- Remove or secure valuable items\\line
+- Provide designated area for waste disposal\\line
+- Clear work areas of ongoing construction\\line\\line
+
+{\\b 8. QUALITY ASSURANCE}\\line
+- Pre-service walkthrough to identify specific requirements\\line
+- Daily progress reporting\\line
+- Final inspection with client representative\\line
+- 48-hour callback guarantee\\line
+- Written completion certificate\\line\\line
+
+{\\b 9. INSURANCE AND COMPLIANCE}\\line
+- General Liability Insurance: $2,000,000\\line
+- Workers Compensation: As required by law\\line
+- All work performed to industry standards\\line
+- OSHA safety compliance\\line\\line
+
+{\\b 10. ACCEPTANCE}\\line\\line
+Client: _________________________  Date: __________\\line\\line
+City Wide: ______________________  Date: __________\\line
+}`;
+            
+            downloadRTF(rtf, 'project-scope.rtf');
+        }
+    </script>
+</body>
+</html>
