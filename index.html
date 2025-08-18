@@ -401,7 +401,7 @@
                 <div class="phase-card selected" onclick="togglePhase('rough')">
                     <input type="checkbox" class="phase-checkbox" id="phaseRough" checked>
                     <h4>Phase 1: Rough Clean</h4>
-                    <p class="text-small">Initial debris removal, sweeping, and basic preparation</p>
+                    <p class="text-small">Initial debris removal, sweeping, dust control, and basic preparation</p>
                     <p class="text-small"><strong>Timeline:</strong> 40-50% of project</p>
                     <p class="text-small"><strong>Rate:</strong> 200-300 sq ft/hour</p>
                 </div>
@@ -409,7 +409,7 @@
                 <div class="phase-card selected" onclick="togglePhase('final')">
                     <input type="checkbox" class="phase-checkbox" id="phaseFinal" checked>
                     <h4>Phase 2: Final Clean</h4>
-                    <p class="text-small">Detailed cleaning, windows, floors, fixtures</p>
+                    <p class="text-small">Detailed cleaning, dusting, mopping, fixtures, HVAC cleaning</p>
                     <p class="text-small"><strong>Timeline:</strong> 40-45% of project</p>
                     <p class="text-small"><strong>Rate:</strong> 150-250 sq ft/hour</p>
                 </div>
@@ -638,20 +638,13 @@
                 </div>
                 
                 <div class="input-group">
-                    <label for="pressureWasher">Pressure Washer</label>
-                    <select id="pressureWasher" onchange="updateCalculations()">
-                        <option value="no">No</option>
-                        <option value="yes">Yes - Hot Water</option>
-                    </select>
+                    <label for="dustMoppers">Dust Mop Systems</label>
+                    <input type="number" id="dustMoppers" value="2" min="1" max="10" onchange="updateCalculations()">
                 </div>
                 
                 <div class="input-group">
-                    <label for="windowEquipment">Window Cleaning System</label>
-                    <select id="windowEquipment" onchange="updateCalculations()">
-                        <option value="basic">Basic Squeegees</option>
-                        <option value="pole" selected>Water-Fed Pole System</option>
-                        <option value="both">Both Systems</option>
-                    </select>
+                    <label for="cartsCaddies">Cleaning Carts/Caddies</label>
+                    <input type="number" id="cartsCaddies" value="2" min="1" max="10" onchange="updateCalculations()">
                 </div>
             </div>
         </div>
@@ -662,33 +655,33 @@
             
             <div class="input-grid">
                 <div class="input-group">
-                    <label for="stripperPrice">Floor Stripper ($/gallon concentrate)</label>
-                    <input type="number" id="stripperPrice" value="15.00" min="10" max="50" step="1" onchange="updateCalculations()">
-                </div>
-                
-                <div class="input-group">
-                    <label for="finishPrice">Floor Finish ($/gallon)</label>
-                    <input type="number" id="finishPrice" value="45.00" min="20" max="120" step="5" onchange="updateCalculations()">
-                </div>
-                
-                <div class="input-group">
-                    <label for="finishCoats">Number of Finish Coats</label>
-                    <input type="number" id="finishCoats" value="5" min="3" max="7" onchange="updateCalculations()">
-                </div>
-                
-                <div class="input-group">
                     <label for="cleanerPrice">All-Purpose Cleaner ($/gallon)</label>
                     <input type="number" id="cleanerPrice" value="8.00" min="5" max="25" step="1" onchange="updateCalculations()">
                 </div>
                 
                 <div class="input-group">
-                    <label for="glassCleanerPrice">Glass Cleaner ($/gallon)</label>
-                    <input type="number" id="glassCleanerPrice" value="6.00" min="4" max="20" step="1" onchange="updateCalculations()">
+                    <label for="disinfectantPrice">Disinfectant ($/gallon)</label>
+                    <input type="number" id="disinfectantPrice" value="12.00" min="8" max="30" step="1" onchange="updateCalculations()">
+                </div>
+                
+                <div class="input-group">
+                    <label for="degreasersPrice">Degreasers ($/gallon)</label>
+                    <input type="number" id="degreasersPrice" value="15.00" min="10" max="40" step="1" onchange="updateCalculations()">
                 </div>
                 
                 <div class="input-group">
                     <label for="suppliesCost">Disposable Supplies ($/1000 sq ft)</label>
                     <input type="number" id="suppliesCost" value="15.00" min="10" max="50" step="5" onchange="updateCalculations()">
+                </div>
+                
+                <div class="input-group">
+                    <label for="trashBags">Trash Bags ($/case)</label>
+                    <input type="number" id="trashBags" value="35.00" min="20" max="60" step="5" onchange="updateCalculations()">
+                </div>
+                
+                <div class="input-group">
+                    <label for="microfiber">Microfiber Cloths ($/dozen)</label>
+                    <input type="number" id="microfiber" value="25.00" min="15" max="50" step="5" onchange="updateCalculations()">
                 </div>
             </div>
         </div>
@@ -729,6 +722,56 @@
                         <option value="aggressive">Aggressive - Win the bid</option>
                     </select>
                 </div>
+            </div>
+        </div>
+
+        <!-- Important Service Exclusions Warning -->
+        <div class="card" style="border: 3px solid var(--accent-red); background: rgba(220, 38, 38, 0.05);">
+            <h2 style="color: var(--accent-red);">⚠️ IMPORTANT: Service Inclusions & Exclusions</h2>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1.5rem;">
+                <div style="background: white; padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--success-green);">
+                    <h3 style="color: var(--success-green); margin-bottom: 1rem;">✓ INCLUDED in This Quote:</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="padding: 0.25rem 0;">✓ Construction debris removal</li>
+                        <li style="padding: 0.25rem 0;">✓ Dust removal from all surfaces</li>
+                        <li style="padding: 0.25rem 0;">✓ Sweeping and vacuuming all floors</li>
+                        <li style="padding: 0.25rem 0;">✓ Wet mopping hard surface floors</li>
+                        <li style="padding: 0.25rem 0;">✓ Basic carpet vacuuming</li>
+                        <li style="padding: 0.25rem 0;">✓ Cleaning and disinfecting restrooms</li>
+                        <li style="padding: 0.25rem 0;">✓ Cleaning HVAC vents and returns</li>
+                        <li style="padding: 0.25rem 0;">✓ Wiping down walls and removing marks</li>
+                        <li style="padding: 0.25rem 0;">✓ Cleaning light fixtures and ceiling fans</li>
+                        <li style="padding: 0.25rem 0;">✓ Removing protective films/stickers</li>
+                        <li style="padding: 0.25rem 0;">✓ Cleaning and polishing fixtures</li>
+                        <li style="padding: 0.25rem 0;">✓ Kitchen and break room cleaning</li>
+                        <li style="padding: 0.25rem 0;">✓ Trash removal and disposal</li>
+                        <li style="padding: 0.25rem 0;">✓ Final touch-up and inspection</li>
+                    </ul>
+                </div>
+                
+                <div style="background: white; padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--accent-red);">
+                    <h3 style="color: var(--accent-red); margin-bottom: 1rem;">✗ NOT INCLUDED - Quote Separately:</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="padding: 0.25rem 0; font-weight: bold; color: var(--accent-red);">✗ STRIP & WAX SERVICES</li>
+                        <li style="padding: 0.25rem 0; margin-left: 1rem;">→ Use Strip & Wax Calculator</li>
+                        <li style="padding: 0.25rem 0; font-weight: bold; color: var(--accent-red);">✗ WINDOW CLEANING</li>
+                        <li style="padding: 0.25rem 0; margin-left: 1rem;">→ Use Window Cleaning Calculator</li>
+                        <li style="padding: 0.25rem 0; font-weight: bold; color: var(--accent-red);">✗ CARPET CLEANING/EXTRACTION</li>
+                        <li style="padding: 0.25rem 0; margin-left: 1rem;">→ Use Carpet Cleaning Calculator</li>
+                        <li style="padding: 0.25rem 0; font-weight: bold; color: var(--accent-red);">✗ PRESSURE WASHING</li>
+                        <li style="padding: 0.25rem 0; margin-left: 1rem;">→ Use Pressure Washing Calculator</li>
+                        <li style="padding: 0.25rem 0; font-weight: bold; color: var(--accent-red);">✗ HIGH DUSTING (above 20ft)</li>
+                        <li style="padding: 0.25rem 0; margin-left: 1rem;">→ Requires specialized equipment</li>
+                        <li style="padding: 0.25rem 0; font-weight: bold; color: var(--accent-red);">✗ EXTERIOR CLEANING</li>
+                        <li style="padding: 0.25rem 0; font-weight: bold; color: var(--accent-red);">✗ UPHOLSTERY CLEANING</li>
+                        <li style="padding: 0.25rem 0; font-weight: bold; color: var(--accent-red);">✗ CONSTRUCTION MATERIAL DISPOSAL FEES</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div style="background: var(--warning-yellow); color: white; padding: 1rem; border-radius: 4px; margin-top: 1.5rem; text-align: center;">
+                <strong style="font-size: 1.1rem;">FSM ACTION REQUIRED: Calculate excluded services using appropriate specialized calculators and add to total project quote</strong>
             </div>
         </div>
 
@@ -1092,15 +1135,15 @@
             const hepaVacuums = parseInt(document.getElementById('hepaVacuums').value) || 2;
             const floorScrubbers = document.getElementById('floorScrubbers').value;
             const lifts = document.getElementById('lifts').value;
-            const pressureWasher = document.getElementById('pressureWasher').value;
-            const windowEquipment = document.getElementById('windowEquipment').value;
+            const dustMoppers = parseInt(document.getElementById('dustMoppers').value) || 2;
+            const cartsCaddies = parseInt(document.getElementById('cartsCaddies').value) || 2;
             
             let dailyCost = 0;
             
             // HEPA Vacuums - $80/day each
             dailyCost += hepaVacuums * 80;
             
-            // Floor scrubbers
+            // Floor scrubbers (for general cleaning, not strip & wax)
             if (floorScrubbers === '1') dailyCost += 150;
             else if (floorScrubbers === '2') dailyCost += 300;
             else if (floorScrubbers === '1r') dailyCost += 250;
@@ -1111,12 +1154,11 @@
             else if (lifts === 'boom') dailyCost += 500;
             else if (lifts === 'both') dailyCost += 750;
             
-            // Pressure washer
-            if (pressureWasher === 'yes') dailyCost += 100;
+            // Dust mop systems - $15/day each
+            dailyCost += dustMoppers * 15;
             
-            // Window equipment
-            if (windowEquipment === 'pole') dailyCost += 50;
-            else if (windowEquipment === 'both') dailyCost += 75;
+            // Cleaning carts/caddies - $10/day each
+            dailyCost += cartsCaddies * 10;
             
             // Phase-specific adjustments
             let phaseMultiplier = 1;
@@ -1128,36 +1170,45 @@
         }
 
         function calculateMaterialsCost(phase, sqft) {
-            const stripperPrice = parseFloat(document.getElementById('stripperPrice').value) || 15;
-            const finishPrice = parseFloat(document.getElementById('finishPrice').value) || 45;
-            const finishCoats = parseInt(document.getElementById('finishCoats').value) || 5;
             const cleanerPrice = parseFloat(document.getElementById('cleanerPrice').value) || 8;
-            const glassCleanerPrice = parseFloat(document.getElementById('glassCleanerPrice').value) || 6;
+            const disinfectantPrice = parseFloat(document.getElementById('disinfectantPrice').value) || 12;
+            const degreasersPrice = parseFloat(document.getElementById('degreasersPrice').value) || 15;
             const suppliesCost = parseFloat(document.getElementById('suppliesCost').value) || 15;
+            const trashBags = parseFloat(document.getElementById('trashBags').value) || 35;
+            const microfiber = parseFloat(document.getElementById('microfiber').value) || 25;
             
             let totalCost = 0;
             
             if (phase === 'rough') {
-                // Basic supplies only
-                totalCost = (sqft / 1000) * suppliesCost * 0.5;
+                // Basic supplies for debris removal and initial cleaning
+                totalCost += (sqft / 1000) * suppliesCost * 0.5;
+                // Trash bags - estimate 1 case per 5000 sq ft
+                totalCost += (sqft / 5000) * trashBags * 0.5;
+                // Minimal cleaning supplies
+                totalCost += (sqft / 8000) * cleanerPrice;
             } else if (phase === 'final') {
-                // Stripper at 600 sq ft coverage per gallon
-                totalCost += (sqft / 600) * stripperPrice;
-                
-                // Finish at 2000 sq ft coverage per gallon, multiple coats
-                totalCost += (sqft / 2000) * finishPrice * finishCoats;
-                
-                // All-purpose cleaner
+                // All-purpose cleaner - 1 gallon per 5000 sq ft
                 totalCost += (sqft / 5000) * cleanerPrice;
                 
-                // Glass cleaner (estimate 10% of square footage is glass)
-                totalCost += (sqft * 0.1 / 1000) * glassCleanerPrice;
+                // Disinfectant - 1 gallon per 8000 sq ft  
+                totalCost += (sqft / 8000) * disinfectantPrice;
                 
-                // Supplies
+                // Degreasers for kitchen/mechanical areas - 1 gallon per 10000 sq ft
+                totalCost += (sqft / 10000) * degreasersPrice;
+                
+                // Microfiber cloths - 1 dozen per 3000 sq ft
+                totalCost += (sqft / 3000) * microfiber;
+                
+                // General supplies
                 totalCost += (sqft / 1000) * suppliesCost;
+                
+                // Trash bags - 1 case per 5000 sq ft
+                totalCost += (sqft / 5000) * trashBags;
             } else if (phase === 'touchup') {
-                // Minimal materials
-                totalCost = (sqft / 1000) * suppliesCost * 0.3;
+                // Minimal materials for final touch-up
+                totalCost += (sqft / 1000) * suppliesCost * 0.3;
+                // Few microfiber cloths
+                totalCost += (sqft / 8000) * microfiber;
             }
             
             return totalCost;
@@ -1486,25 +1537,32 @@ City Wide will provide comprehensive post-construction cleaning services for you
 ${phases.rough ? `{\\b Phase 1: Rough Clean (40-50% of project time)}\\line
 - Remove all construction debris and trash\\line
 - Sweep and vacuum all surfaces\\line
-- Clean windows and frames (initial pass)\\line
 - Wipe down all surfaces to remove dust\\line
-- Clean and disinfect restrooms\\line\\line` : ''}
+- Clean and disinfect restrooms\\line
+- Remove protective coverings from fixtures\\line\\line` : ''}
 
 ${phases.final ? `{\\b Phase 2: Final Clean (40-45% of project time)}\\line
-- Strip and refinish all hard floors\\line
-- Deep clean all carpeted areas\\line
-- Detail clean all windows inside and out\\line
+- Wet mop all hard floor surfaces\\line
+- Deep vacuum all carpeted areas\\line
 - Clean and polish all fixtures and hardware\\line
 - Sanitize all touchpoints and surfaces\\line
 - Clean HVAC vents and returns\\line
-- Detail clean kitchens and break rooms\\line\\line` : ''}
+- Detail clean kitchens and break rooms\\line
+- Clean all baseboards and trim\\line\\line` : ''}
 
 ${phases.touchup ? `{\\b Phase 3: Touch-Up Clean (10-15% of project time)}\\line
 - Final inspection and quality check\\line
 - Spot clean any missed areas\\line
-- Final window cleaning and detailing\\line
 - Remove any fingerprints or smudges\\line
 - Prepare space for final walkthrough\\line\\line` : ''}
+
+{\\b SERVICES NOT INCLUDED}\\line
+Please note that the following services are NOT included in this quote:\\line
+- Strip and Wax services\\line
+- Window cleaning (interior and exterior)\\line
+- Carpet cleaning/extraction\\line
+- Pressure washing\\line
+- High dusting above 20 feet\\line\\line
 
 {\\b CLIENT PREPARATION REQUIREMENTS}\\line
 - Ensure all construction work is complete\\line
@@ -1520,11 +1578,10 @@ Estimated Duration: ${calculationResults.totalDays} working days\\line
 Crew Size: ${calculationResults.crewSize} trained professionals\\line\\line
 
 {\\b POST-SERVICE MAINTENANCE}\\line
-- Wait 24 hours before heavy foot traffic on newly finished floors\\line
-- Avoid wet mopping for 72 hours after floor finishing\\line
-- Use only pH-neutral cleaners on finished floors\\line
-- Schedule regular maintenance to preserve finish\\line
-- Keep HVAC filters clean to minimize dust\\line\\line
+- Maintain regular cleaning schedule\\line
+- Keep HVAC filters clean to minimize dust\\line
+- Address spills and stains promptly\\line
+- Schedule periodic deep cleaning as needed\\line\\line
 
 {\\b QUALITY ASSURANCE}\\line
 - Pre-service walkthrough to identify specific concerns\\line
@@ -1705,17 +1762,13 @@ ${phases.rough ? `{\\b Phase 1 - Rough Clean:}\\line
 - Remove all construction debris, trash, and packaging materials\\line
 - Sweep and vacuum all floor surfaces\\line
 - Dust all horizontal and vertical surfaces\\line
-- Clean windows and window frames (initial cleaning)\\line
 - Wipe down walls and remove marks/stains\\line
 - Clean and disinfect all restrooms\\line
 - Remove protective coverings from fixtures\\line\\line` : ''}
 
 ${phases.final ? `{\\b Phase 2 - Final Clean:}\\line
-- Strip existing floor finish (if applicable)\\line
-- Apply ${document.getElementById('finishCoats').value} coats of commercial-grade floor finish\\line
-- Deep clean all carpeted areas with HEPA filtration\\line
-- Detail clean all windows, inside and outside\\line
-- Clean and polish all light fixtures\\line
+- Wet mop all hard floor surfaces\\line
+- Deep vacuum all carpeted areas with HEPA filtration\\line
 - Detail clean all doors, frames, and hardware\\line
 - Clean all HVAC vents, returns, and diffusers\\line
 - Sanitize all kitchens, break rooms, and appliances\\line
@@ -1728,61 +1781,69 @@ ${phases.touchup ? `{\\b Phase 3 - Touch-Up Clean:}\\line
 - Perform detailed quality inspection\\line
 - Address any areas requiring additional attention\\line
 - Remove fingerprints and smudges from all surfaces\\line
-- Final cleaning of windows and glass\\line
-- Touch-up floor finish as needed\\line
+- Touch-up clean as needed\\line
 - Prepare space for client inspection\\line
 - Complete final walkthrough checklist\\line\\line` : ''}
 
-{\\b 3. EQUIPMENT AND MATERIALS}\\line
+{\\b 3. SERVICES EXPLICITLY EXCLUDED}\\line
+The following services are NOT included and must be quoted separately:\\line
+- Strip and Wax floor services\\line
+- Interior and exterior window cleaning\\line
+- Carpet cleaning/extraction services\\line
+- Pressure washing services\\line
+- High dusting above 20 feet\\line
+- Exterior building cleaning\\line
+- Upholstery cleaning\\line
+- Construction material disposal fees\\line\\line
+
+{\\b 4. EQUIPMENT AND MATERIALS}\\line
 City Wide will provide all necessary equipment and materials including:\\line
 - HEPA-filtered vacuums (${document.getElementById('hepaVacuums').value} units)\\line
 - Floor scrubbing equipment\\line
-- Window cleaning systems\\line
 - All cleaning chemicals and supplies\\line
 - Safety equipment and PPE\\line
-- Floor finish and application equipment\\line\\line
+- Dust mop systems and cleaning carts\\line\\line
 
-{\\b 4. TIMELINE}\\line
+{\\b 5. TIMELINE}\\line
 - Start Date: TBD\\line
 - Duration: ${calculationResults.totalDays} working days\\line
 - Working Hours: ${document.getElementById('timeOfService').selectedOptions[0].text}\\line
 - Crew Size: ${calculationResults.crewSize} workers\\line\\line
 
-{\\b 5. PRICING}\\line
+{\\b 6. PRICING}\\line
 Total Project Price: ${formatCurrency(calculationResults.clientPrice)}\\line
 Price Per Square Foot: ${formatCurrencyDetailed(calculationResults.pricePerSqFt)}\\line
 Payment Terms: Net 30\\line\\line
 
-{\\b 6. EXCLUSIONS}\\line
+{\\b 7. EXCLUSIONS}\\line
 The following items are NOT included in this scope:\\line
 - Removal of hazardous materials\\line
-- Exterior building washing\\line
-- Carpet replacement or repair\\line
 - Painting or drywall repair\\line
 - Electrical or plumbing work\\line
+- Moving furniture or equipment\\line
 - Disposal fees exceeding normal construction debris\\line\\line
 
-{\\b 7. CLIENT RESPONSIBILITIES}\\line
+{\\b 8. CLIENT RESPONSIBILITIES}\\line
 - Provide access to all areas requiring cleaning\\line
 - Ensure utilities (water, electricity) are operational\\line
 - Remove or secure valuable items\\line
 - Provide designated area for waste disposal\\line
 - Clear work areas of ongoing construction\\line\\line
 
-{\\b 8. QUALITY ASSURANCE}\\line
+{\\b 9. QUALITY ASSURANCE}\\line
 - Pre-service walkthrough to identify specific requirements\\line
 - Daily progress reporting\\line
 - Final inspection with client representative\\line
 - 48-hour callback guarantee\\line
 - Written completion certificate\\line\\line
 
-{\\b 9. INSURANCE AND COMPLIANCE}\\line
+{\\b 10. INSURANCE AND COMPLIANCE}\\line
 - General Liability Insurance: $2,000,000\\line
 - Workers Compensation: As required by law\\line
 - All work performed to industry standards\\line
 - OSHA safety compliance\\line\\line
 
-{\\b 10. ACCEPTANCE}\\line\\line
+{\\b 11. ACCEPTANCE}\\line\\line
 Client: _________________________  Date: __________\\line\\line
 City Wide: ______________________  Date: __________\\line
 }`;
