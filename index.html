@@ -501,14 +501,11 @@
                             <button class="inhouse-btn" data-category="equipment" onclick="toggleProvider('equipment', 'inhouse')">In-House</button>
                         </div>
                     </div>
-                    
-                    <div class="toggle-group">
-                        <label>Chemicals/Supplies</label>
-                        <div class="toggle-buttons">
-                            <button class="vendor-btn active" data-category="supplies" onclick="toggleProvider('supplies', 'vendor')">Vendor</button>
-                            <button class="inhouse-btn" data-category="supplies" onclick="toggleProvider('supplies', 'inhouse')">In-House</button>
-                        </div>
-                    </div>
+                </div>
+                <div style="background: var(--light-gray); padding: 1rem; margin-top: 1rem; border-radius: 4px;">
+                    <p style="font-size: 0.9rem; color: var(--dark-gray); margin: 0;">
+                        <strong>Note:</strong> Materials and supplies are automatically calculated at 10% of base labor cost and follow the labor provider selection.
+                    </p>
                 </div>
             </div>
         </div>
@@ -595,27 +592,31 @@
                         <span class="value" id="breakdownState">$0.00</span>
                     </div>
                     <div class="breakdown-item">
+                        <span class="label">Supplies/Equipment (10%):</span>
+                        <span class="value" id="breakdownSupplies">$1.80</span>
+                    </div>
+                    <div class="breakdown-item">
                         <span class="label">Subtotal:</span>
-                        <span class="value" id="breakdownSubtotal">$20.03</span>
+                        <span class="value" id="breakdownSubtotal">$21.83</span>
                     </div>
                     <div class="breakdown-item">
                         <span class="label">IC Profit (10%):</span>
-                        <span class="value" id="breakdownICProfit">$2.00</span>
+                        <span class="value" id="breakdownICProfit">$2.18</span>
                     </div>
                     <div class="breakdown-item">
                         <span class="label">IC Loaded Rate:</span>
-                        <span class="value" id="breakdownLoaded">$22.03</span>
+                        <span class="value" id="breakdownLoaded">$24.01</span>
                     </div>
+                </div>
+                <div style="background: var(--light-gray); padding: 1rem; margin-top: 1rem; border-radius: 4px;">
+                    <p style="font-size: 0.9rem; color: var(--dark-gray); margin: 0;">
+                        <strong>Note:</strong> Supplies/Equipment at 10% of base rate covers cleaning supplies, microfiber cloths, trash bags, basic vacuums, and disposable items. Major equipment rentals are charged separately.
+                    </p>
                 </div>
             </div>
 
-            <h3>Equipment Requirements</h3>
+            <h3>Major Equipment Requirements (Additional Charges)</h3>
             <div class="input-grid">
-                <div class="input-group">
-                    <label for="hepaVacuums">HEPA Vacuums Needed</label>
-                    <input type="number" id="hepaVacuums" value="2" min="1" max="10" onchange="updateCalculations()">
-                </div>
-                
                 <div class="input-group">
                     <label for="floorScrubbers">Floor Scrubbers</label>
                     <select id="floorScrubbers" onchange="updateCalculations()">
@@ -625,6 +626,11 @@
                         <option value="1r">1 Ride-On</option>
                         <option value="2r">2 Ride-On</option>
                     </select>
+                </div>
+                
+                <div class="input-group">
+                    <label for="wetVacs">Wet/Dry Vacuums</label>
+                    <input type="number" id="wetVacs" value="2" min="0" max="10" onchange="updateCalculations()">
                 </div>
                 
                 <div class="input-group">
@@ -638,50 +644,31 @@
                 </div>
                 
                 <div class="input-group">
-                    <label for="dustMoppers">Dust Mop Systems</label>
-                    <input type="number" id="dustMoppers" value="2" min="1" max="10" onchange="updateCalculations()">
+                    <label for="sideBySide">Side-by-Side/Utility Vehicle</label>
+                    <select id="sideBySide" onchange="updateCalculations()">
+                        <option value="no">No</option>
+                        <option value="yes">Yes - 1 Unit</option>
+                        <option value="multiple">Yes - 2+ Units</option>
+                    </select>
                 </div>
                 
                 <div class="input-group">
-                    <label for="cartsCaddies">Cleaning Carts/Caddies</label>
-                    <input type="number" id="cartsCaddies" value="2" min="1" max="10" onchange="updateCalculations()">
-                </div>
-            </div>
-        </div>
-
-        <!-- Materials & Supplies Section -->
-        <div class="card">
-            <h2>Materials & Supplies</h2>
-            
-            <div class="input-grid">
-                <div class="input-group">
-                    <label for="cleanerPrice">All-Purpose Cleaner ($/gallon)</label>
-                    <input type="number" id="cleanerPrice" value="8.00" min="5" max="25" step="1" onchange="updateCalculations()">
+                    <label for="dumpster">Dumpster Rental</label>
+                    <select id="dumpster" onchange="updateCalculations()">
+                        <option value="no">No - Client Provided</option>
+                        <option value="small">10-15 Yard</option>
+                        <option value="medium">20-30 Yard</option>
+                        <option value="large">40 Yard</option>
+                    </select>
                 </div>
                 
                 <div class="input-group">
-                    <label for="disinfectantPrice">Disinfectant ($/gallon)</label>
-                    <input type="number" id="disinfectantPrice" value="12.00" min="8" max="30" step="1" onchange="updateCalculations()">
-                </div>
-                
-                <div class="input-group">
-                    <label for="degreasersPrice">Degreasers ($/gallon)</label>
-                    <input type="number" id="degreasersPrice" value="15.00" min="10" max="40" step="1" onchange="updateCalculations()">
-                </div>
-                
-                <div class="input-group">
-                    <label for="suppliesCost">Disposable Supplies ($/1000 sq ft)</label>
-                    <input type="number" id="suppliesCost" value="15.00" min="10" max="50" step="5" onchange="updateCalculations()">
-                </div>
-                
-                <div class="input-group">
-                    <label for="trashBags">Trash Bags ($/case)</label>
-                    <input type="number" id="trashBags" value="35.00" min="20" max="60" step="5" onchange="updateCalculations()">
-                </div>
-                
-                <div class="input-group">
-                    <label for="microfiber">Microfiber Cloths ($/dozen)</label>
-                    <input type="number" id="microfiber" value="25.00" min="15" max="50" step="5" onchange="updateCalculations()">
+                    <label for="generators">Generators (if no power)</label>
+                    <select id="generators" onchange="updateCalculations()">
+                        <option value="no">Not Needed</option>
+                        <option value="small">Small (5kW)</option>
+                        <option value="large">Large (20kW)</option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -969,8 +956,7 @@
         // Global state for provider selections
         let providers = {
             labor: 'vendor',
-            equipment: 'vendor',
-            supplies: 'vendor'
+            equipment: 'vendor'
         };
 
         // Phase selections
@@ -1091,8 +1077,9 @@
             const workComp = baseRate * 0.025;
             const gl = baseRate * 0.005;
             const stateTaxAmount = baseRate * (stateTax / 100);
+            const suppliesEquipment = baseRate * 0.10; // 10% of base rate for supplies/equipment
             
-            const subtotal = baseRate + fica + futa + workComp + gl + stateTaxAmount;
+            const subtotal = baseRate + fica + futa + workComp + gl + stateTaxAmount + suppliesEquipment;
             const icProfitAmount = subtotal * (icProfit / 100);
             const loadedRate = subtotal + icProfitAmount;
             
@@ -1102,6 +1089,7 @@
             document.getElementById('breakdownWC').textContent = formatCurrencyDetailed(workComp);
             document.getElementById('breakdownGL').textContent = formatCurrencyDetailed(gl);
             document.getElementById('breakdownState').textContent = formatCurrencyDetailed(stateTaxAmount);
+            document.getElementById('breakdownSupplies').textContent = formatCurrencyDetailed(suppliesEquipment);
             document.getElementById('breakdownSubtotal').textContent = formatCurrencyDetailed(subtotal);
             document.getElementById('breakdownICProfit').textContent = formatCurrencyDetailed(icProfitAmount);
             document.getElementById('breakdownLoaded').textContent = formatCurrencyDetailed(loadedRate);
@@ -1132,86 +1120,53 @@
         }
 
         function calculateEquipmentCost(phase, days) {
-            const hepaVacuums = parseInt(document.getElementById('hepaVacuums').value) || 2;
             const floorScrubbers = document.getElementById('floorScrubbers').value;
+            const wetVacs = parseInt(document.getElementById('wetVacs').value) || 0;
             const lifts = document.getElementById('lifts').value;
-            const dustMoppers = parseInt(document.getElementById('dustMoppers').value) || 2;
-            const cartsCaddies = parseInt(document.getElementById('cartsCaddies').value) || 2;
+            const sideBySide = document.getElementById('sideBySide').value;
+            const dumpster = document.getElementById('dumpster').value;
+            const generators = document.getElementById('generators').value;
             
             let dailyCost = 0;
             
-            // HEPA Vacuums - $80/day each
-            dailyCost += hepaVacuums * 80;
-            
-            // Floor scrubbers (for general cleaning, not strip & wax)
+            // Floor scrubbers (for general cleaning)
             if (floorScrubbers === '1') dailyCost += 150;
             else if (floorScrubbers === '2') dailyCost += 300;
             else if (floorScrubbers === '1r') dailyCost += 250;
             else if (floorScrubbers === '2r') dailyCost += 500;
+            
+            // Wet/Dry Vacuums - $50/day each
+            dailyCost += wetVacs * 50;
             
             // Lifts
             if (lifts === 'scissor') dailyCost += 250;
             else if (lifts === 'boom') dailyCost += 500;
             else if (lifts === 'both') dailyCost += 750;
             
-            // Dust mop systems - $15/day each
-            dailyCost += dustMoppers * 15;
+            // Side-by-Side/Utility Vehicle
+            if (sideBySide === 'yes') dailyCost += 150;
+            else if (sideBySide === 'multiple') dailyCost += 300;
             
-            // Cleaning carts/caddies - $10/day each
-            dailyCost += cartsCaddies * 10;
+            // Generators
+            if (generators === 'small') dailyCost += 75;
+            else if (generators === 'large') dailyCost += 200;
             
             // Phase-specific adjustments
             let phaseMultiplier = 1;
-            if (phase === 'rough') phaseMultiplier = 0.6;
-            else if (phase === 'final') phaseMultiplier = 1.2;
-            else if (phase === 'touchup') phaseMultiplier = 0.4;
+            if (phase === 'rough') phaseMultiplier = 0.8;  // More equipment needed in rough phase
+            else if (phase === 'final') phaseMultiplier = 1.0;
+            else if (phase === 'touchup') phaseMultiplier = 0.3;
             
-            return dailyCost * days * phaseMultiplier;
-        }
-
-        function calculateMaterialsCost(phase, sqft) {
-            const cleanerPrice = parseFloat(document.getElementById('cleanerPrice').value) || 8;
-            const disinfectantPrice = parseFloat(document.getElementById('disinfectantPrice').value) || 12;
-            const degreasersPrice = parseFloat(document.getElementById('degreasersPrice').value) || 15;
-            const suppliesCost = parseFloat(document.getElementById('suppliesCost').value) || 15;
-            const trashBags = parseFloat(document.getElementById('trashBags').value) || 35;
-            const microfiber = parseFloat(document.getElementById('microfiber').value) || 25;
+            let totalEquipmentCost = dailyCost * days * phaseMultiplier;
             
-            let totalCost = 0;
-            
-            if (phase === 'rough') {
-                // Basic supplies for debris removal and initial cleaning
-                totalCost += (sqft / 1000) * suppliesCost * 0.5;
-                // Trash bags - estimate 1 case per 5000 sq ft
-                totalCost += (sqft / 5000) * trashBags * 0.5;
-                // Minimal cleaning supplies
-                totalCost += (sqft / 8000) * cleanerPrice;
-            } else if (phase === 'final') {
-                // All-purpose cleaner - 1 gallon per 5000 sq ft
-                totalCost += (sqft / 5000) * cleanerPrice;
-                
-                // Disinfectant - 1 gallon per 8000 sq ft  
-                totalCost += (sqft / 8000) * disinfectantPrice;
-                
-                // Degreasers for kitchen/mechanical areas - 1 gallon per 10000 sq ft
-                totalCost += (sqft / 10000) * degreasersPrice;
-                
-                // Microfiber cloths - 1 dozen per 3000 sq ft
-                totalCost += (sqft / 3000) * microfiber;
-                
-                // General supplies
-                totalCost += (sqft / 1000) * suppliesCost;
-                
-                // Trash bags - 1 case per 5000 sq ft
-                totalCost += (sqft / 5000) * trashBags;
-            } else if (phase === 'touchup') {
-                // Minimal materials for final touch-up
-                totalCost += (sqft / 1000) * suppliesCost * 0.3;
-                // Few microfiber cloths
-                totalCost += (sqft / 8000) * microfiber;
+            // Add one-time dumpster cost only to rough phase
+            if (phase === 'rough' && dumpster !== 'no') {
+                if (dumpster === 'small') totalEquipmentCost += 400;
+                else if (dumpster === 'medium') totalEquipmentCost += 600;
+                else if (dumpster === 'large') totalEquipmentCost += 800;
             }
             
-            return totalCost;
+            return totalEquipmentCost;
         }
 
         function updateCalculations() {
@@ -1270,14 +1225,13 @@
             let totalHours = 0;
             let totalLaborCost = 0;
             let totalEquipmentCost = 0;
-            let totalMaterialsCost = 0;
             
             // Phase 1: Rough Clean
             if (phases.rough) {
                 const rough = calculatePhaseHours('rough', sqft, buildingType, condition, complexity);
                 const roughDays = Math.ceil(rough.hours / (crewSize * 8));
                 
-                // Calculate labor cost with crew composition
+                // Calculate labor cost with crew composition (already includes supplies at 10%)
                 const regularWorkers = Math.max(crewSize - supervisors - specialists, 0);
                 const averageRate = (
                     (regularWorkers * loadedRate) +
@@ -1286,27 +1240,24 @@
                 ) / crewSize;
                 
                 const roughLaborCost = rough.hours * averageRate * timeMultiplier;
-                
                 const roughEquipment = calculateEquipmentCost('rough', roughDays);
-                const roughMaterials = calculateMaterialsCost('rough', sqft);
                 
                 document.getElementById('roughHours').textContent = Math.round(rough.hours);
                 document.getElementById('roughRate').textContent = Math.round(rough.rate) + ' sq ft/hr';
                 document.getElementById('roughLabor').textContent = formatCurrency(roughLaborCost);
                 document.getElementById('roughEquipment').textContent = formatCurrency(roughEquipment);
-                document.getElementById('roughMaterials').textContent = formatCurrency(roughMaterials);
-                document.getElementById('roughTotal').textContent = formatCurrency(roughLaborCost + roughEquipment + roughMaterials);
+                document.getElementById('roughMaterials').textContent = 'Included';
+                document.getElementById('roughTotal').textContent = formatCurrency(roughLaborCost + roughEquipment);
                 
                 totalHours += rough.hours;
                 totalLaborCost += roughLaborCost;
                 totalEquipmentCost += roughEquipment;
-                totalMaterialsCost += roughMaterials;
             } else {
                 document.getElementById('roughHours').textContent = '0';
                 document.getElementById('roughRate').textContent = 'N/A';
                 document.getElementById('roughLabor').textContent = '$0';
                 document.getElementById('roughEquipment').textContent = '$0';
-                document.getElementById('roughMaterials').textContent = '$0';
+                document.getElementById('roughMaterials').textContent = 'N/A';
                 document.getElementById('roughTotal').textContent = '$0';
             }
             
@@ -1323,27 +1274,24 @@
                 ) / crewSize;
                 
                 const finalLaborCost = final.hours * averageRate * timeMultiplier;
-                
                 const finalEquipment = calculateEquipmentCost('final', finalDays);
-                const finalMaterials = calculateMaterialsCost('final', sqft);
                 
                 document.getElementById('finalHours').textContent = Math.round(final.hours);
                 document.getElementById('finalRate').textContent = Math.round(final.rate) + ' sq ft/hr';
                 document.getElementById('finalLabor').textContent = formatCurrency(finalLaborCost);
                 document.getElementById('finalEquipment').textContent = formatCurrency(finalEquipment);
-                document.getElementById('finalMaterials').textContent = formatCurrency(finalMaterials);
-                document.getElementById('finalTotal').textContent = formatCurrency(finalLaborCost + finalEquipment + finalMaterials);
+                document.getElementById('finalMaterials').textContent = 'Included';
+                document.getElementById('finalTotal').textContent = formatCurrency(finalLaborCost + finalEquipment);
                 
                 totalHours += final.hours;
                 totalLaborCost += finalLaborCost;
                 totalEquipmentCost += finalEquipment;
-                totalMaterialsCost += finalMaterials;
             } else {
                 document.getElementById('finalHours').textContent = '0';
                 document.getElementById('finalRate').textContent = 'N/A';
                 document.getElementById('finalLabor').textContent = '$0';
                 document.getElementById('finalEquipment').textContent = '$0';
-                document.getElementById('finalMaterials').textContent = '$0';
+                document.getElementById('finalMaterials').textContent = 'N/A';
                 document.getElementById('finalTotal').textContent = '$0';
             }
             
@@ -1360,27 +1308,24 @@
                 ) / crewSize;
                 
                 const touchupLaborCost = touchup.hours * averageRate * timeMultiplier;
-                
                 const touchupEquipment = calculateEquipmentCost('touchup', touchupDays);
-                const touchupMaterials = calculateMaterialsCost('touchup', sqft);
                 
                 document.getElementById('touchupHours').textContent = Math.round(touchup.hours);
                 document.getElementById('touchupRate').textContent = Math.round(touchup.rate) + ' sq ft/hr';
                 document.getElementById('touchupLabor').textContent = formatCurrency(touchupLaborCost);
                 document.getElementById('touchupEquipment').textContent = formatCurrency(touchupEquipment);
-                document.getElementById('touchupMaterials').textContent = formatCurrency(touchupMaterials);
-                document.getElementById('touchupTotal').textContent = formatCurrency(touchupLaborCost + touchupEquipment + touchupMaterials);
+                document.getElementById('touchupMaterials').textContent = 'Included';
+                document.getElementById('touchupTotal').textContent = formatCurrency(touchupLaborCost + touchupEquipment);
                 
                 totalHours += touchup.hours;
                 totalLaborCost += touchupLaborCost;
                 totalEquipmentCost += touchupEquipment;
-                totalMaterialsCost += touchupMaterials;
             } else {
                 document.getElementById('touchupHours').textContent = '0';
                 document.getElementById('touchupRate').textContent = 'N/A';
                 document.getElementById('touchupLabor').textContent = '$0';
                 document.getElementById('touchupEquipment').textContent = '$0';
-                document.getElementById('touchupMaterials').textContent = '$0';
+                document.getElementById('touchupMaterials').textContent = 'N/A';
                 document.getElementById('touchupTotal').textContent = '$0';
             }
             
@@ -1391,17 +1336,13 @@
             if (providers.equipment === 'vendor') {
                 totalEquipmentCost *= 1.10;
             }
-            if (providers.supplies === 'vendor') {
-                totalMaterialsCost *= 1.10;
-            }
             
             // Apply regional and competition adjustments
             totalLaborCost *= regionalMultiplier * competitionAdjustment;
             totalEquipmentCost *= regionalMultiplier * competitionAdjustment;
-            totalMaterialsCost *= regionalMultiplier * competitionAdjustment;
             
-            // Calculate totals
-            const totalCostToCW = totalLaborCost + totalEquipmentCost + totalMaterialsCost;
+            // Calculate totals (no separate materials cost since it's in labor)
+            const totalCostToCW = totalLaborCost + totalEquipmentCost;
             const clientPrice = totalCostToCW / (1 - cityWideMargin / 100);
             const grossProfit = clientPrice - totalCostToCW;
             const vendorPayment = totalCostToCW;
@@ -1414,7 +1355,7 @@
             document.getElementById('totalDays').textContent = totalDays;
             document.getElementById('totalLabor').textContent = formatCurrency(totalLaborCost);
             document.getElementById('totalEquipment').textContent = formatCurrency(totalEquipmentCost);
-            document.getElementById('totalMaterials').textContent = formatCurrency(totalMaterialsCost);
+            document.getElementById('totalMaterials').textContent = 'Included in Labor';
             document.getElementById('totalCostToCW').textContent = formatCurrency(totalCostToCW);
             document.getElementById('pricePerSqFt').textContent = formatCurrencyDetailed(pricePerSqFt);
             document.getElementById('clientPrice').textContent = formatCurrency(clientPrice);
@@ -1434,7 +1375,7 @@
                 totalDays,
                 totalLaborCost,
                 totalEquipmentCost,
-                totalMaterialsCost,
+                totalMaterialsCost: 0, // Materials now included in labor
                 totalCostToCW,
                 clientPrice,
                 grossProfit,
