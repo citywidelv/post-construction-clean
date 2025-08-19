@@ -315,6 +315,7 @@
             gap: 1rem;
             flex-wrap: wrap;
             margin-top: 2rem;
+            justify-content: center;
         }
 
         .export-btn {
@@ -326,22 +327,15 @@
             cursor: pointer;
             transition: all 0.3s;
             color: var(--white);
+            min-width: 200px;
         }
 
         .export-btn.vendor {
             background: var(--secondary-blue);
         }
 
-        .export-btn.client {
-            background: var(--primary-blue);
-        }
-
         .export-btn.fsm {
             background: var(--success-green);
-        }
-
-        .export-btn.scope {
-            background: var(--warning-yellow);
         }
 
         .export-btn:hover {
@@ -375,14 +369,6 @@
         }
 
         /* Utility Classes */
-        .mt-1 { margin-top: 0.5rem; }
-        .mt-2 { margin-top: 1rem; }
-        .mt-3 { margin-top: 1.5rem; }
-        .mb-1 { margin-bottom: 0.5rem; }
-        .mb-2 { margin-bottom: 1rem; }
-        .mb-3 { margin-bottom: 1.5rem; }
-        .text-center { text-align: center; }
-        .font-bold { font-weight: 700; }
         .text-small { font-size: 0.85rem; }
     </style>
 </head>
@@ -502,11 +488,6 @@
                         </div>
                     </div>
                 </div>
-                <div style="background: var(--light-gray); padding: 1rem; margin-top: 1rem; border-radius: 4px;">
-                    <p style="font-size: 0.9rem; color: var(--dark-gray); margin: 0;">
-                        <strong>Note:</strong> Materials and supplies are automatically calculated at 10% of base labor cost and follow the labor provider selection.
-                    </p>
-                </div>
             </div>
         </div>
 
@@ -592,7 +573,7 @@
                         <span class="value" id="breakdownState">$0.00</span>
                     </div>
                     <div class="breakdown-item">
-                        <span class="label">Supplies/Equipment (10%):</span>
+                        <span class="label">Supplies (10%):</span>
                         <span class="value" id="breakdownSupplies">$1.80</span>
                     </div>
                     <div class="breakdown-item">
@@ -608,14 +589,9 @@
                         <span class="value" id="breakdownLoaded">$24.01</span>
                     </div>
                 </div>
-                <div style="background: var(--light-gray); padding: 1rem; margin-top: 1rem; border-radius: 4px;">
-                    <p style="font-size: 0.9rem; color: var(--dark-gray); margin: 0;">
-                        <strong>Note:</strong> Supplies/Equipment at 10% of base rate covers cleaning supplies, microfiber cloths, trash bags, basic vacuums, and disposable items. Major equipment rentals are charged separately.
-                    </p>
-                </div>
             </div>
 
-            <h3>Major Equipment Requirements (Additional Charges)</h3>
+            <h3>Major Equipment Requirements</h3>
             <div class="input-grid">
                 <div class="input-group">
                     <label for="floorScrubbers">Floor Scrubbers</label>
@@ -644,30 +620,12 @@
                 </div>
                 
                 <div class="input-group">
-                    <label for="sideBySide">Side-by-Side/Utility Vehicle</label>
-                    <select id="sideBySide" onchange="updateCalculations()">
-                        <option value="no">No</option>
-                        <option value="yes">Yes - 1 Unit</option>
-                        <option value="multiple">Yes - 2+ Units</option>
-                    </select>
-                </div>
-                
-                <div class="input-group">
                     <label for="dumpster">Dumpster Rental</label>
                     <select id="dumpster" onchange="updateCalculations()">
                         <option value="no">No - Client Provided</option>
                         <option value="small">10-15 Yard</option>
                         <option value="medium">20-30 Yard</option>
                         <option value="large">40 Yard</option>
-                    </select>
-                </div>
-                
-                <div class="input-group">
-                    <label for="generators">Generators (if no power)</label>
-                    <select id="generators" onchange="updateCalculations()">
-                        <option value="no">Not Needed</option>
-                        <option value="small">Small (5kW)</option>
-                        <option value="large">Large (20kW)</option>
                     </select>
                 </div>
             </div>
@@ -709,56 +667,6 @@
                         <option value="aggressive">Aggressive - Win the bid</option>
                     </select>
                 </div>
-            </div>
-        </div>
-
-        <!-- Important Service Exclusions Warning -->
-        <div class="card" style="border: 3px solid var(--accent-red); background: rgba(220, 38, 38, 0.05);">
-            <h2 style="color: var(--accent-red);">⚠️ IMPORTANT: Service Inclusions & Exclusions</h2>
-            
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1.5rem;">
-                <div style="background: white; padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--success-green);">
-                    <h3 style="color: var(--success-green); margin-bottom: 1rem;">✓ INCLUDED in This Quote:</h3>
-                    <ul style="list-style: none; padding: 0;">
-                        <li style="padding: 0.25rem 0;">✓ Construction debris removal</li>
-                        <li style="padding: 0.25rem 0;">✓ Dust removal from all surfaces</li>
-                        <li style="padding: 0.25rem 0;">✓ Sweeping and vacuuming all floors</li>
-                        <li style="padding: 0.25rem 0;">✓ Wet mopping hard surface floors</li>
-                        <li style="padding: 0.25rem 0;">✓ Basic carpet vacuuming</li>
-                        <li style="padding: 0.25rem 0;">✓ Cleaning and disinfecting restrooms</li>
-                        <li style="padding: 0.25rem 0;">✓ Cleaning HVAC vents and returns</li>
-                        <li style="padding: 0.25rem 0;">✓ Wiping down walls and removing marks</li>
-                        <li style="padding: 0.25rem 0;">✓ Cleaning light fixtures and ceiling fans</li>
-                        <li style="padding: 0.25rem 0;">✓ Removing protective films/stickers</li>
-                        <li style="padding: 0.25rem 0;">✓ Cleaning and polishing fixtures</li>
-                        <li style="padding: 0.25rem 0;">✓ Kitchen and break room cleaning</li>
-                        <li style="padding: 0.25rem 0;">✓ Trash removal and disposal</li>
-                        <li style="padding: 0.25rem 0;">✓ Final touch-up and inspection</li>
-                    </ul>
-                </div>
-                
-                <div style="background: white; padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--accent-red);">
-                    <h3 style="color: var(--accent-red); margin-bottom: 1rem;">✗ NOT INCLUDED - Quote Separately:</h3>
-                    <ul style="list-style: none; padding: 0;">
-                        <li style="padding: 0.25rem 0; font-weight: bold; color: var(--accent-red);">✗ STRIP & WAX SERVICES</li>
-                        <li style="padding: 0.25rem 0; margin-left: 1rem;">→ Use Strip & Wax Calculator</li>
-                        <li style="padding: 0.25rem 0; font-weight: bold; color: var(--accent-red);">✗ WINDOW CLEANING</li>
-                        <li style="padding: 0.25rem 0; margin-left: 1rem;">→ Use Window Cleaning Calculator</li>
-                        <li style="padding: 0.25rem 0; font-weight: bold; color: var(--accent-red);">✗ CARPET CLEANING/EXTRACTION</li>
-                        <li style="padding: 0.25rem 0; margin-left: 1rem;">→ Use Carpet Cleaning Calculator</li>
-                        <li style="padding: 0.25rem 0; font-weight: bold; color: var(--accent-red);">✗ PRESSURE WASHING</li>
-                        <li style="padding: 0.25rem 0; margin-left: 1rem;">→ Use Pressure Washing Calculator</li>
-                        <li style="padding: 0.25rem 0; font-weight: bold; color: var(--accent-red);">✗ HIGH DUSTING (above 20ft)</li>
-                        <li style="padding: 0.25rem 0; margin-left: 1rem;">→ Requires specialized equipment</li>
-                        <li style="padding: 0.25rem 0; font-weight: bold; color: var(--accent-red);">✗ EXTERIOR CLEANING</li>
-                        <li style="padding: 0.25rem 0; font-weight: bold; color: var(--accent-red);">✗ UPHOLSTERY CLEANING</li>
-                        <li style="padding: 0.25rem 0; font-weight: bold; color: var(--accent-red);">✗ CONSTRUCTION MATERIAL DISPOSAL FEES</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div style="background: var(--warning-yellow); color: white; padding: 1rem; border-radius: 4px; margin-top: 1.5rem; text-align: center;">
-                <strong style="font-size: 1.1rem;">FSM ACTION REQUIRED: Calculate excluded services using appropriate specialized calculators and add to total project quote</strong>
             </div>
         </div>
 
@@ -867,7 +775,7 @@
                 <div class="result-card">
                     <h4>Total Days</h4>
                     <div class="value" id="totalDays">11</div>
-                    <div class="subtitle">With 4-person crew</div>
+                    <div class="subtitle">With crew</div>
                 </div>
                 
                 <div class="result-card">
@@ -903,13 +811,13 @@
                 <div class="result-card highlight">
                     <h4>Final Client Price</h4>
                     <div class="value" id="clientPrice">$15,615</div>
-                    <div class="subtitle">With 35% margin</div>
+                    <div class="subtitle">With margin</div>
                 </div>
                 
                 <div class="result-card highlight">
                     <h4>CW Gross Profit</h4>
                     <div class="value" id="grossProfit">$5,465</div>
-                    <div class="subtitle">35% margin</div>
+                    <div class="subtitle">Profit amount</div>
                 </div>
                 
                 <div class="result-card">
@@ -917,59 +825,39 @@
                     <div class="value" id="vendorPayment">$11,165</div>
                     <div class="subtitle">With IC profit</div>
                 </div>
-                
-                <div class="result-card">
-                    <h4>Per Phase Price</h4>
-                    <div class="value" id="perPhaseAvg">$5,205</div>
-                    <div class="subtitle">Average per phase</div>
-                </div>
-                
-                <div class="result-card">
-                    <h4>Profit Margin %</h4>
-                    <div class="value" id="profitPercent">35%</div>
-                    <div class="subtitle">City Wide margin</div>
-                </div>
             </div>
         </div>
 
-        <!-- Export Options -->
+        <!-- Export Options - Simplified -->
         <div class="card">
             <h2>Export Options</h2>
             <div class="export-section">
                 <button class="export-btn vendor" onclick="exportVendorSpecs()">
                     Export Vendor Specifications
                 </button>
-                <button class="export-btn client" onclick="exportClientInstructions()">
-                    Export Client Instructions
-                </button>
                 <button class="export-btn fsm" onclick="exportFSMSummary()">
-                    Export FSM Job Summary
-                </button>
-                <button class="export-btn scope" onclick="generateScope()">
-                    Generate Project Scope
+                    Export FSM Summary
                 </button>
             </div>
         </div>
     </div>
 
     <script>
-        // Global state for provider selections
+        // Global state
         let providers = {
             labor: 'vendor',
             equipment: 'vendor'
         };
 
-        // Phase selections
         let phases = {
             rough: true,
             final: true,
             touchup: true
         };
 
-        // Store calculation results for exports
         let calculationResults = {};
 
-        // Production rates by building type and condition
+        // Production rates
         const productionRates = {
             rough: {
                 office: { light: 300, moderate: 250, heavy: 200, extreme: 150 },
@@ -1003,12 +891,8 @@
             }
         };
 
-        // Initialize on page load
+        // Initialize
         window.addEventListener('DOMContentLoaded', function() {
-            // Set initial phase card states
-            document.querySelectorAll('.phase-card').forEach(card => {
-                card.classList.add('selected');
-            });
             updateCalculations();
         });
 
@@ -1017,7 +901,6 @@
             const checkbox = document.getElementById(`phase${phase.charAt(0).toUpperCase() + phase.slice(1)}`);
             checkbox.checked = phases[phase];
             
-            // Update phase card styling
             const cards = document.querySelectorAll('.phase-card');
             cards.forEach((card, index) => {
                 const phaseNames = ['rough', 'final', 'touchup'];
@@ -1036,7 +919,6 @@
         function toggleProvider(category, type) {
             providers[category] = type;
             
-            // Update button styling
             const buttons = document.querySelectorAll(`[data-category="${category}"]`);
             buttons.forEach(btn => {
                 if (btn.classList.contains(`${type}-btn`)) {
@@ -1077,7 +959,7 @@
             const workComp = baseRate * 0.025;
             const gl = baseRate * 0.005;
             const stateTaxAmount = baseRate * (stateTax / 100);
-            const suppliesEquipment = baseRate * 0.10; // 10% of base rate for supplies/equipment
+            const suppliesEquipment = baseRate * 0.10;
             
             const subtotal = baseRate + fica + futa + workComp + gl + stateTaxAmount + suppliesEquipment;
             const icProfitAmount = subtotal * (icProfit / 100);
@@ -1100,7 +982,6 @@
         function calculatePhaseHours(phase, sqft, buildingType, condition, complexity) {
             const baseRate = productionRates[phase][buildingType][condition];
             
-            // Adjust for complexity
             let complexityMultiplier = 1;
             switch(complexity) {
                 case 'simple': complexityMultiplier = 1.1; break;
@@ -1109,9 +990,8 @@
                 case 'verycomplex': complexityMultiplier = 0.8; break;
             }
             
-            // Adjust for multiple floors
             const floors = parseInt(document.getElementById('floors').value) || 1;
-            const floorMultiplier = 1 - ((floors - 1) * 0.05); // 5% reduction per floor
+            const floorMultiplier = 1 - ((floors - 1) * 0.05);
             
             const adjustedRate = baseRate * complexityMultiplier * Math.max(floorMultiplier, 0.7);
             const hours = sqft / adjustedRate;
@@ -1123,43 +1003,28 @@
             const floorScrubbers = document.getElementById('floorScrubbers').value;
             const wetVacs = parseInt(document.getElementById('wetVacs').value) || 0;
             const lifts = document.getElementById('lifts').value;
-            const sideBySide = document.getElementById('sideBySide').value;
             const dumpster = document.getElementById('dumpster').value;
-            const generators = document.getElementById('generators').value;
             
             let dailyCost = 0;
             
-            // Floor scrubbers (for general cleaning)
             if (floorScrubbers === '1') dailyCost += 150;
             else if (floorScrubbers === '2') dailyCost += 300;
             else if (floorScrubbers === '1r') dailyCost += 250;
             else if (floorScrubbers === '2r') dailyCost += 500;
             
-            // Wet/Dry Vacuums - $50/day each
             dailyCost += wetVacs * 50;
             
-            // Lifts
             if (lifts === 'scissor') dailyCost += 250;
             else if (lifts === 'boom') dailyCost += 500;
             else if (lifts === 'both') dailyCost += 750;
             
-            // Side-by-Side/Utility Vehicle
-            if (sideBySide === 'yes') dailyCost += 150;
-            else if (sideBySide === 'multiple') dailyCost += 300;
-            
-            // Generators
-            if (generators === 'small') dailyCost += 75;
-            else if (generators === 'large') dailyCost += 200;
-            
-            // Phase-specific adjustments
             let phaseMultiplier = 1;
-            if (phase === 'rough') phaseMultiplier = 0.8;  // More equipment needed in rough phase
+            if (phase === 'rough') phaseMultiplier = 0.8;
             else if (phase === 'final') phaseMultiplier = 1.0;
             else if (phase === 'touchup') phaseMultiplier = 0.3;
             
             let totalEquipmentCost = dailyCost * days * phaseMultiplier;
             
-            // Add one-time dumpster cost only to rough phase
             if (phase === 'rough' && dumpster !== 'no') {
                 if (dumpster === 'small') totalEquipmentCost += 400;
                 else if (dumpster === 'medium') totalEquipmentCost += 600;
@@ -1184,17 +1049,14 @@
             const competitionLevel = document.getElementById('competitionLevel').value;
             const cityWideMargin = parseFloat(document.getElementById('cityWideMargin').value) || 35;
             
-            // Labor rates
             const laborRate = parseFloat(document.getElementById('laborRate').value) || 18;
             const supervisorRate = parseFloat(document.getElementById('supervisorRate').value) || 23;
             const specialistRate = parseFloat(document.getElementById('specialistRate').value) || 25;
             
-            // Get loaded rates
             const { loadedRate } = updateICBreakdown();
-            const supervisorLoaded = supervisorRate * 1.25; // Simplified for supervisors
-            const specialistLoaded = specialistRate * 1.3; // Simplified for specialists
+            const supervisorLoaded = supervisorRate * 1.25;
+            const specialistLoaded = specialistRate * 1.3;
             
-            // Time of service multiplier
             let timeMultiplier = 1;
             switch(timeOfService) {
                 case 'evening': timeMultiplier = 1.15; break;
@@ -1203,7 +1065,6 @@
                 case 'emergency': timeMultiplier = 1.35; break;
             }
             
-            // Regional multiplier
             let regionalMultiplier = 1;
             switch(region) {
                 case 'rural': regionalMultiplier = 0.75; break;
@@ -1213,7 +1074,6 @@
                 case 'nyc': regionalMultiplier = 1.35; break;
             }
             
-            // Competition adjustment
             let competitionAdjustment = 1;
             switch(competitionLevel) {
                 case 'low': competitionAdjustment = 1.10; break;
@@ -1221,161 +1081,108 @@
                 case 'aggressive': competitionAdjustment = 0.90; break;
             }
             
-            // Calculate for each phase
             let totalHours = 0;
             let totalLaborCost = 0;
+            let totalBaseLaborCost = 0;
             let totalEquipmentCost = 0;
             
-            // Phase 1: Rough Clean
-            if (phases.rough) {
-                const rough = calculatePhaseHours('rough', sqft, buildingType, condition, complexity);
-                const roughDays = Math.ceil(rough.hours / (crewSize * 8));
-                
-                // Calculate labor cost with crew composition (already includes supplies at 10%)
-                const regularWorkers = Math.max(crewSize - supervisors - specialists, 0);
-                const averageRate = (
-                    (regularWorkers * loadedRate) +
-                    (supervisors * supervisorLoaded) +
-                    (specialists * specialistLoaded)
-                ) / crewSize;
-                
-                const roughLaborCost = rough.hours * averageRate * timeMultiplier;
-                const roughEquipment = calculateEquipmentCost('rough', roughDays);
-                
-                document.getElementById('roughHours').textContent = Math.round(rough.hours);
-                document.getElementById('roughRate').textContent = Math.round(rough.rate) + ' sq ft/hr';
-                document.getElementById('roughLabor').textContent = formatCurrency(roughLaborCost);
-                document.getElementById('roughEquipment').textContent = formatCurrency(roughEquipment);
-                document.getElementById('roughMaterials').textContent = 'Included';
-                document.getElementById('roughTotal').textContent = formatCurrency(roughLaborCost + roughEquipment);
-                
-                totalHours += rough.hours;
-                totalLaborCost += roughLaborCost;
-                totalEquipmentCost += roughEquipment;
-            } else {
-                document.getElementById('roughHours').textContent = '0';
-                document.getElementById('roughRate').textContent = 'N/A';
-                document.getElementById('roughLabor').textContent = '$0';
-                document.getElementById('roughEquipment').textContent = '$0';
-                document.getElementById('roughMaterials').textContent = 'N/A';
-                document.getElementById('roughTotal').textContent = '$0';
-            }
+            // Store phase details for export
+            let phaseDetails = {};
             
-            // Phase 2: Final Clean
-            if (phases.final) {
-                const final = calculatePhaseHours('final', sqft, buildingType, condition, complexity);
-                const finalDays = Math.ceil(final.hours / (crewSize * 8));
-                
-                const regularWorkers = Math.max(crewSize - supervisors - specialists, 0);
-                const averageRate = (
-                    (regularWorkers * loadedRate) +
-                    (supervisors * supervisorLoaded) +
-                    (specialists * specialistLoaded)
-                ) / crewSize;
-                
-                const finalLaborCost = final.hours * averageRate * timeMultiplier;
-                const finalEquipment = calculateEquipmentCost('final', finalDays);
-                
-                document.getElementById('finalHours').textContent = Math.round(final.hours);
-                document.getElementById('finalRate').textContent = Math.round(final.rate) + ' sq ft/hr';
-                document.getElementById('finalLabor').textContent = formatCurrency(finalLaborCost);
-                document.getElementById('finalEquipment').textContent = formatCurrency(finalEquipment);
-                document.getElementById('finalMaterials').textContent = 'Included';
-                document.getElementById('finalTotal').textContent = formatCurrency(finalLaborCost + finalEquipment);
-                
-                totalHours += final.hours;
-                totalLaborCost += finalLaborCost;
-                totalEquipmentCost += finalEquipment;
-            } else {
-                document.getElementById('finalHours').textContent = '0';
-                document.getElementById('finalRate').textContent = 'N/A';
-                document.getElementById('finalLabor').textContent = '$0';
-                document.getElementById('finalEquipment').textContent = '$0';
-                document.getElementById('finalMaterials').textContent = 'N/A';
-                document.getElementById('finalTotal').textContent = '$0';
-            }
+            // Phase calculations
+            ['rough', 'final', 'touchup'].forEach(phase => {
+                if (phases[phase]) {
+                    const phaseCalc = calculatePhaseHours(phase, sqft, buildingType, condition, complexity);
+                    const phaseDays = Math.ceil(phaseCalc.hours / (crewSize * 8));
+                    
+                    const basePhaseLabor = phaseCalc.hours * laborRate;
+                    const phaseMaterials = basePhaseLabor * 0.10;
+                    totalBaseLaborCost += basePhaseLabor;
+                    
+                    const regularWorkers = Math.max(crewSize - supervisors - specialists, 0);
+                    const averageRate = (
+                        (regularWorkers * loadedRate) +
+                        (supervisors * supervisorLoaded) +
+                        (specialists * specialistLoaded)
+                    ) / crewSize;
+                    
+                    const phaseLaborCost = phaseCalc.hours * averageRate * timeMultiplier;
+                    const phaseEquipment = calculateEquipmentCost(phase, phaseDays);
+                    
+                    phaseDetails[phase] = {
+                        hours: Math.round(phaseCalc.hours),
+                        rate: Math.round(phaseCalc.rate),
+                        labor: phaseLaborCost,
+                        equipment: phaseEquipment,
+                        materials: phaseMaterials,
+                        days: phaseDays
+                    };
+                    
+                    // Update display
+                    document.getElementById(`${phase}Hours`).textContent = Math.round(phaseCalc.hours);
+                    document.getElementById(`${phase}Rate`).textContent = Math.round(phaseCalc.rate) + ' sq ft/hr';
+                    document.getElementById(`${phase}Labor`).textContent = formatCurrency(phaseLaborCost);
+                    document.getElementById(`${phase}Equipment`).textContent = formatCurrency(phaseEquipment);
+                    document.getElementById(`${phase}Materials`).textContent = formatCurrency(phaseMaterials);
+                    document.getElementById(`${phase}Total`).textContent = formatCurrency(phaseLaborCost + phaseEquipment);
+                    
+                    totalHours += phaseCalc.hours;
+                    totalLaborCost += phaseLaborCost;
+                    totalEquipmentCost += phaseEquipment;
+                } else {
+                    document.getElementById(`${phase}Hours`).textContent = '0';
+                    document.getElementById(`${phase}Rate`).textContent = 'N/A';
+                    document.getElementById(`${phase}Labor`).textContent = '$0';
+                    document.getElementById(`${phase}Equipment`).textContent = '$0';
+                    document.getElementById(`${phase}Materials`).textContent = '$0';
+                    document.getElementById(`${phase}Total`).textContent = '$0';
+                }
+            });
             
-            // Phase 3: Touch-Up
-            if (phases.touchup) {
-                const touchup = calculatePhaseHours('touchup', sqft, buildingType, condition, complexity);
-                const touchupDays = Math.ceil(touchup.hours / (crewSize * 8));
-                
-                const regularWorkers = Math.max(crewSize - supervisors - specialists, 0);
-                const averageRate = (
-                    (regularWorkers * loadedRate) +
-                    (supervisors * supervisorLoaded) +
-                    (specialists * specialistLoaded)
-                ) / crewSize;
-                
-                const touchupLaborCost = touchup.hours * averageRate * timeMultiplier;
-                const touchupEquipment = calculateEquipmentCost('touchup', touchupDays);
-                
-                document.getElementById('touchupHours').textContent = Math.round(touchup.hours);
-                document.getElementById('touchupRate').textContent = Math.round(touchup.rate) + ' sq ft/hr';
-                document.getElementById('touchupLabor').textContent = formatCurrency(touchupLaborCost);
-                document.getElementById('touchupEquipment').textContent = formatCurrency(touchupEquipment);
-                document.getElementById('touchupMaterials').textContent = 'Included';
-                document.getElementById('touchupTotal').textContent = formatCurrency(touchupLaborCost + touchupEquipment);
-                
-                totalHours += touchup.hours;
-                totalLaborCost += touchupLaborCost;
-                totalEquipmentCost += touchupEquipment;
-            } else {
-                document.getElementById('touchupHours').textContent = '0';
-                document.getElementById('touchupRate').textContent = 'N/A';
-                document.getElementById('touchupLabor').textContent = '$0';
-                document.getElementById('touchupEquipment').textContent = '$0';
-                document.getElementById('touchupMaterials').textContent = 'N/A';
-                document.getElementById('touchupTotal').textContent = '$0';
-            }
+            const totalMaterialsCost = totalBaseLaborCost * 0.10;
             
-            // Apply provider logic
             if (providers.labor === 'vendor') {
-                totalLaborCost *= 1.10; // Add IC profit for vendor
+                totalLaborCost *= 1.10;
             }
             if (providers.equipment === 'vendor') {
                 totalEquipmentCost *= 1.10;
             }
             
-            // Apply regional and competition adjustments
             totalLaborCost *= regionalMultiplier * competitionAdjustment;
             totalEquipmentCost *= regionalMultiplier * competitionAdjustment;
             
-            // Calculate totals (no separate materials cost since it's in labor)
             const totalCostToCW = totalLaborCost + totalEquipmentCost;
             const clientPrice = totalCostToCW / (1 - cityWideMargin / 100);
             const grossProfit = clientPrice - totalCostToCW;
             const vendorPayment = totalCostToCW;
             const totalDays = Math.ceil(totalHours / (crewSize * 8));
             const pricePerSqFt = clientPrice / sqft;
-            const perPhaseAvg = clientPrice / Object.values(phases).filter(p => p).length;
             
-            // Update display
             document.getElementById('totalHours').textContent = Math.round(totalHours);
             document.getElementById('totalDays').textContent = totalDays;
             document.getElementById('totalLabor').textContent = formatCurrency(totalLaborCost);
             document.getElementById('totalEquipment').textContent = formatCurrency(totalEquipmentCost);
-            document.getElementById('totalMaterials').textContent = 'Included in Labor';
+            document.getElementById('totalMaterials').textContent = formatCurrency(totalMaterialsCost);
             document.getElementById('totalCostToCW').textContent = formatCurrency(totalCostToCW);
             document.getElementById('pricePerSqFt').textContent = formatCurrencyDetailed(pricePerSqFt);
             document.getElementById('clientPrice').textContent = formatCurrency(clientPrice);
             document.getElementById('grossProfit').textContent = formatCurrency(grossProfit);
             document.getElementById('vendorPayment').textContent = formatCurrency(vendorPayment);
-            document.getElementById('perPhaseAvg').textContent = formatCurrency(perPhaseAvg);
-            document.getElementById('profitPercent').textContent = cityWideMargin + '%';
             
-            // Store results for exports
+            // Store all results
             calculationResults = {
                 sqft,
                 buildingType,
                 condition,
                 complexity,
                 crewSize,
-                totalHours,
+                supervisors,
+                specialists,
+                totalHours: Math.round(totalHours),
                 totalDays,
                 totalLaborCost,
                 totalEquipmentCost,
-                totalMaterialsCost: 0, // Materials now included in labor
+                totalMaterialsCost,
                 totalCostToCW,
                 clientPrice,
                 grossProfit,
@@ -1383,413 +1190,169 @@
                 pricePerSqFt,
                 cityWideMargin,
                 phases,
-                providers
+                providers,
+                phaseDetails,
+                laborRate,
+                supervisorRate,
+                specialistRate,
+                loadedRate,
+                timeOfService,
+                region,
+                competitionLevel,
+                floors: parseInt(document.getElementById('floors').value),
+                icProfit: parseFloat(document.getElementById('icProfit').value),
+                stateTax: parseFloat(document.getElementById('stateTax').value)
             };
         }
 
-        // Export functions
-        function downloadRTF(content, filename) {
-            const blob = new Blob([content], { type: 'application/rtf' });
+        // Simple export functions
+        function exportVendorSpecs() {
+            let content = 'VENDOR SPECIFICATIONS - POST-CONSTRUCTION CLEANING\n';
+            content += '='.repeat(50) + '\n\n';
+            content += `Generated: ${new Date().toLocaleDateString()}\n\n`;
+            
+            content += 'PROJECT OVERVIEW\n';
+            content += '-'.repeat(30) + '\n';
+            content += `Square Footage: ${calculationResults.sqft.toLocaleString()} sq ft\n`;
+            content += `Building Type: ${document.getElementById('buildingType').selectedOptions[0].text}\n`;
+            content += `Condition: ${document.getElementById('buildingCondition').selectedOptions[0].text}\n`;
+            content += `Complexity: ${document.getElementById('buildingComplexity').selectedOptions[0].text}\n`;
+            content += `Number of Floors: ${calculationResults.floors}\n\n`;
+            
+            content += 'PHASES INCLUDED\n';
+            content += '-'.repeat(30) + '\n';
+            if (phases.rough) content += '- Phase 1: Rough Clean\n';
+            if (phases.final) content += '- Phase 2: Final Clean\n';
+            if (phases.touchup) content += '- Phase 3: Touch-Up\n';
+            content += '\n';
+            
+            content += 'LABOR REQUIREMENTS\n';
+            content += '-'.repeat(30) + '\n';
+            content += `Total Hours: ${calculationResults.totalHours} hours\n`;
+            content += `Crew Size: ${calculationResults.crewSize} workers\n`;
+            content += `Duration: ${calculationResults.totalDays} days\n`;
+            content += `Base Rate: $${calculationResults.laborRate}/hour\n\n`;
+            
+            content += 'EQUIPMENT NEEDED\n';
+            content += '-'.repeat(30) + '\n';
+            content += `Floor Scrubbers: ${document.getElementById('floorScrubbers').selectedOptions[0].text}\n`;
+            content += `Wet/Dry Vacuums: ${document.getElementById('wetVacs').value} units\n`;
+            content += `Lifts: ${document.getElementById('lifts').selectedOptions[0].text}\n`;
+            content += `Dumpster: ${document.getElementById('dumpster').selectedOptions[0].text}\n\n`;
+            
+            content += 'MATERIALS REQUIRED\n';
+            content += '-'.repeat(30) + '\n';
+            content += `All-Purpose Cleaner: ${Math.ceil(calculationResults.sqft / 5000)} gallons\n`;
+            content += `Glass Cleaner: ${Math.ceil(calculationResults.sqft * 0.1 / 1000)} gallons\n`;
+            content += `Disinfectant: ${Math.ceil(calculationResults.sqft / 8000)} gallons\n`;
+            content += `Microfiber Cloths: ${Math.ceil(calculationResults.totalHours / 4)} dozen\n`;
+            content += `Trash Bags: ${Math.ceil(calculationResults.sqft / 1000)} bags\n`;
+            
+            // Download as text file
+            const blob = new Blob([content], { type: 'text/plain' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = filename;
+            a.download = 'vendor-specifications.txt';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             window.URL.revokeObjectURL(url);
         }
-
-        function exportVendorSpecs() {
-            const rtf = `{\\rtf1\\ansi\\deff0 {\\fonttbl{\\f0 Times New Roman;}}
-\\f0\\fs24
-{\\b VENDOR SPECIFICATIONS - POST-CONSTRUCTION CLEANING}\\line\\line
-Generated: ${new Date().toLocaleDateString()}\\line\\line
-
-{\\b PROJECT OVERVIEW}\\line
-Square Footage: ${calculationResults.sqft.toLocaleString()} sq ft\\line
-Building Type: ${document.getElementById('buildingType').selectedOptions[0].text}\\line
-Building Condition: ${document.getElementById('buildingCondition').selectedOptions[0].text}\\line
-Building Complexity: ${document.getElementById('buildingComplexity').selectedOptions[0].text}\\line
-Number of Floors: ${document.getElementById('floors').value}\\line\\line
-
-{\\b PHASES INCLUDED}\\line
-${phases.rough ? '- Phase 1: Rough Clean\\line' : ''}
-${phases.final ? '- Phase 2: Final Clean\\line' : ''}
-${phases.touchup ? '- Phase 3: Touch-Up Clean\\line' : ''}
-\\line
-
-{\\b LABOR REQUIREMENTS}\\line
-Total Labor Hours: ${Math.round(calculationResults.totalHours)} hours\\line
-Crew Size: ${calculationResults.crewSize} workers\\line
-Estimated Days: ${calculationResults.totalDays} days\\line
-Base Labor Rate: ${document.getElementById('laborRate').value}/hour\\line\\line
-
-{\\b EQUIPMENT NEEDED}\\line
-HEPA Vacuums: ${document.getElementById('hepaVacuums').value} units\\line
-Floor Scrubbers: ${document.getElementById('floorScrubbers').selectedOptions[0].text}\\line
-Lifts: ${document.getElementById('lifts').selectedOptions[0].text}\\line
-Pressure Washer: ${document.getElementById('pressureWasher').selectedOptions[0].text}\\line
-Window Equipment: ${document.getElementById('windowEquipment').selectedOptions[0].text}\\line\\line
-
-{\\b MATERIALS REQUIRED}\\line
-Floor Stripper: ${Math.ceil(calculationResults.sqft / 600)} gallons\\line
-Floor Finish: ${Math.ceil(calculationResults.sqft / 2000 * parseInt(document.getElementById('finishCoats').value))} gallons\\line
-All-Purpose Cleaner: ${Math.ceil(calculationResults.sqft / 5000)} gallons\\line
-Glass Cleaner: ${Math.ceil(calculationResults.sqft * 0.1 / 1000)} gallons\\line
-Disposable Supplies: Based on ${calculationResults.sqft.toLocaleString()} sq ft\\line\\line
-
-{\\b QUALITY STANDARDS}\\line
-- All surfaces must be free of construction dust and debris\\line
-- Windows cleaned inside and out to streak-free finish\\line
-- Floors stripped and refinished with ${document.getElementById('finishCoats').value} coats\\line
-- All fixtures, outlets, and switches cleaned and polished\\line
-- HVAC vents and returns vacuumed and wiped\\line
-- Light fixtures cleaned and bulbs replaced as needed\\line\\line
-
-{\\b SAFETY REQUIREMENTS}\\line
-- All workers must wear appropriate PPE\\line
-- HEPA filtration required for dust control\\line
-- Proper ventilation during chemical application\\line
-- Fall protection for work above 6 feet\\line
-- Current insurance certificates required\\line\\line
-
-{\\b COMPLETION TIMELINE}\\line
-Phase 1 (Rough): ${phases.rough ? Math.ceil(document.getElementById('roughHours').textContent / (calculationResults.crewSize * 8)) + ' days' : 'Not included'}\\line
-Phase 2 (Final): ${phases.final ? Math.ceil(document.getElementById('finalHours').textContent / (calculationResults.crewSize * 8)) + ' days' : 'Not included'}\\line
-Phase 3 (Touch-up): ${phases.touchup ? Math.ceil(document.getElementById('touchupHours').textContent / (calculationResults.crewSize * 8)) + ' days' : 'Not included'}\\line
-Total Project Duration: ${calculationResults.totalDays} working days\\line
-}`;
-            
-            downloadRTF(rtf, 'vendor-specifications.rtf');
-        }
-
-        function exportClientInstructions() {
-            const rtf = `{\\rtf1\\ansi\\deff0 {\\fonttbl{\\f0 Times New Roman;}}
-\\f0\\fs24
-{\\b CLIENT INSTRUCTIONS - POST-CONSTRUCTION CLEANING}\\line\\line
-Generated: ${new Date().toLocaleDateString()}\\line\\line
-
-{\\b SERVICE OVERVIEW}\\line
-City Wide will provide comprehensive post-construction cleaning services for your ${calculationResults.sqft.toLocaleString()} sq ft facility. Our three-phase approach ensures your space is move-in ready and exceeds industry standards.\\line\\line
-
-{\\b THREE-PHASE CLEANING PROCESS}\\line\\line
-
-${phases.rough ? `{\\b Phase 1: Rough Clean (40-50% of project time)}\\line
-- Remove all construction debris and trash\\line
-- Sweep and vacuum all surfaces\\line
-- Wipe down all surfaces to remove dust\\line
-- Clean and disinfect restrooms\\line
-- Remove protective coverings from fixtures\\line\\line` : ''}
-
-${phases.final ? `{\\b Phase 2: Final Clean (40-45% of project time)}\\line
-- Wet mop all hard floor surfaces\\line
-- Deep vacuum all carpeted areas\\line
-- Clean and polish all fixtures and hardware\\line
-- Sanitize all touchpoints and surfaces\\line
-- Clean HVAC vents and returns\\line
-- Detail clean kitchens and break rooms\\line
-- Clean all baseboards and trim\\line\\line` : ''}
-
-${phases.touchup ? `{\\b Phase 3: Touch-Up Clean (10-15% of project time)}\\line
-- Final inspection and quality check\\line
-- Spot clean any missed areas\\line
-- Remove any fingerprints or smudges\\line
-- Prepare space for final walkthrough\\line\\line` : ''}
-
-{\\b SERVICES NOT INCLUDED}\\line
-Please note that the following services are NOT included in this quote:\\line
-- Strip and Wax services\\line
-- Window cleaning (interior and exterior)\\line
-- Carpet cleaning/extraction\\line
-- Pressure washing\\line
-- High dusting above 20 feet\\line\\line
-
-{\\b CLIENT PREPARATION REQUIREMENTS}\\line
-- Ensure all construction work is complete\\line
-- Provide access to water and electricity\\line
-- Clear pathways for equipment movement\\line
-- Remove or secure valuable items\\line
-- Provide parking for crew vehicles\\line
-- Designate area for waste disposal\\line\\line
-
-{\\b TIMING AND SCHEDULING}\\line
-Service Schedule: ${document.getElementById('timeOfService').selectedOptions[0].text}\\line
-Estimated Duration: ${calculationResults.totalDays} working days\\line
-Crew Size: ${calculationResults.crewSize} trained professionals\\line\\line
-
-{\\b POST-SERVICE MAINTENANCE}\\line
-- Maintain regular cleaning schedule\\line
-- Keep HVAC filters clean to minimize dust\\line
-- Address spills and stains promptly\\line
-- Schedule periodic deep cleaning as needed\\line\\line
-
-{\\b QUALITY ASSURANCE}\\line
-- Pre-service walkthrough to identify specific concerns\\line
-- Daily progress reports during service\\line
-- Final inspection with client representative\\line
-- 48-hour callback guarantee for any issues\\line
-- Detailed completion certificate provided\\line\\line
-
-{\\b SAFETY MEASURES}\\line
-- All crew members are fully insured and bonded\\line
-- OSHA-compliant safety procedures followed\\line
-- Non-toxic, eco-friendly cleaning products available\\line
-- Proper ventilation maintained during service\\line\\line
-
-{\\b CONTACT INFORMATION}\\line
-For questions or concerns during service, please contact your City Wide Facility Solutions Manager.\\line
-Emergency after-hours support available.\\line
-}`;
-            
-            downloadRTF(rtf, 'client-instructions.rtf');
-        }
-
+        
         function exportFSMSummary() {
-            const rtf = `{\\rtf1\\ansi\\deff0 {\\fonttbl{\\f0 Times New Roman;}}
-\\f0\\fs24
-{\\b FACILITY SOLUTIONS MANAGER - COMPLETE JOB SUMMARY}\\line\\line
-Service: Post-Construction Cleaning\\line
-Location: ${calculationResults.sqft.toLocaleString()} sq ft ${document.getElementById('buildingType').selectedOptions[0].text}\\line
-Generated: ${new Date().toLocaleString()}\\line\\line
-
-{\\b\\fs28 JOB OVERVIEW}\\line\\line
-Square Footage: ${calculationResults.sqft.toLocaleString()} sq ft\\line
-Building Type: ${document.getElementById('buildingType').selectedOptions[0].text}\\line
-Post-Construction Condition: ${document.getElementById('buildingCondition').selectedOptions[0].text}\\line
-Complexity Level: ${document.getElementById('buildingComplexity').selectedOptions[0].text}\\line
-Number of Floors: ${document.getElementById('floors').value}\\line
-Service Schedule: ${document.getElementById('timeOfService').selectedOptions[0].text}\\line\\line
-
-Total Labor Hours: ${Math.round(calculationResults.totalHours)} hours\\line
-Recommended Crew Size: ${calculationResults.crewSize} workers\\line
-Project Duration: ${calculationResults.totalDays} days\\line\\line
-
-{\\b\\fs28 PRICING SUMMARY}\\line\\line
-{\\b Final Client Price: ${formatCurrency(calculationResults.clientPrice)}}\\line
-Total Vendor Payment: ${formatCurrency(calculationResults.vendorPayment)}\\line
-{\\b City Wide Gross Profit: ${formatCurrency(calculationResults.grossProfit)}}\\line
-City Wide Margin: ${calculationResults.cityWideMargin}%\\line
-Price Per Square Foot: ${formatCurrencyDetailed(calculationResults.pricePerSqFt)}\\line\\line
-
-{\\b\\fs28 VENDOR PAYMENT STRUCTURE}\\line\\line
-{\\b Cost Provider Selections:}\\line
-Labor: ${providers.labor === 'vendor' ? 'Vendor Provided (includes 10% IC profit)' : 'In-House (no IC profit)'}\\line
-Equipment: ${providers.equipment === 'vendor' ? 'Vendor Provided (includes 10% IC profit)' : 'In-House (no IC profit)'}\\line
-Supplies: ${providers.supplies === 'vendor' ? 'Vendor Provided (includes 10% IC profit)' : 'In-House (no IC profit)'}\\line\\line
-
-{\\b Labor Rate Breakdown:}\\line
-Base Rate: ${document.getElementById('laborRate').value}/hour\\line
-FICA (7.65%): ${(parseFloat(document.getElementById('laborRate').value) * 0.0765).toFixed(2)}\\line
-FUTA (0.60%): ${(parseFloat(document.getElementById('laborRate').value) * 0.006).toFixed(2)}\\line
-Work Comp (2.50%): ${(parseFloat(document.getElementById('laborRate').value) * 0.025).toFixed(2)}\\line
-GL (0.50%): ${(parseFloat(document.getElementById('laborRate').value) * 0.005).toFixed(2)}\\line
-State Tax: ${(parseFloat(document.getElementById('laborRate').value) * parseFloat(document.getElementById('stateTax').value) / 100).toFixed(2)}\\line
-${providers.labor === 'vendor' ? 'IC Profit (10%): Included\\line' : ''}
-\\line
-
-{\\b\\fs28 SITE CONDITIONS & CHALLENGES}\\line\\line
-- Condition: ${document.getElementById('buildingCondition').selectedOptions[0].text}\\line
-- Complexity: ${document.getElementById('buildingComplexity').selectedOptions[0].text}\\line
-- Multiple floors: ${document.getElementById('floors').value > 1 ? 'Yes - requires additional coordination' : 'No'}\\line
-- After-hours work: ${document.getElementById('timeOfService').value !== 'normal' ? 'Yes - premium rates apply' : 'No'}\\line
-- Regional market: ${document.getElementById('region').selectedOptions[0].text}\\line
-- Competition level: ${document.getElementById('competitionLevel').selectedOptions[0].text}\\line\\line
-
-{\\b\\fs28 VENDOR QUESTIONS TO ASK}\\line\\line
-1. Do you have experience with post-construction cleaning for ${document.getElementById('buildingType').selectedOptions[0].text} facilities?\\line
-2. Can you provide ${document.getElementById('hepaVacuums').value} HEPA vacuums and necessary equipment?\\line
-3. Do you have current general liability and workers comp insurance?\\line
-4. Can you commit to ${calculationResults.totalDays} consecutive days of work?\\line
-5. Do you have a crew of at least ${calculationResults.crewSize} trained workers available?\\line
-6. Are you familiar with floor stripping and refinishing procedures?\\line
-7. Do you have proper safety equipment for working at heights?\\line\\line
-
-{\\b\\fs28 CLIENT COMMUNICATION POINTS}\\line\\line
-{\\b Pre-Service:}\\line
-- Confirm all construction work is complete\\line
-- Ensure utilities are connected and operational\\line
-- Verify access to all areas requiring cleaning\\line
-- Discuss any specific areas of concern\\line\\line
-
-{\\b During Service:}\\line
-- Provide daily progress updates\\line
-- Address any unexpected conditions immediately\\line
-- Maintain clear communication channels\\line
-- Document work with before/after photos\\line\\line
-
-{\\b Post-Service:}\\line
-- Conduct thorough walkthrough with client\\line
-- Provide care and maintenance instructions\\line
-- Establish callback procedure for any issues\\line
-- Schedule follow-up quality check\\line\\line
-
-{\\b\\fs28 SCHEDULING CONSIDERATIONS}\\line\\line
-- Optimal timing: After all trades complete, before move-in\\line
-- Weather concerns: High humidity affects floor finish drying\\line
-- Coordination required with other contractors\\line
-- Allow 24-hour cure time for floor finish before occupancy\\line
-- ${document.getElementById('timeOfService').value !== 'normal' ? 'Special scheduling for after-hours work required\\line' : ''}
-- Consider phased approach if building partially occupied\\line\\line
-
-{\\b\\fs28 QUALITY ASSURANCE CHECKLIST}\\line\\line
-{\\b Phase 1 - Rough Clean:}\\line
-[ ] All construction debris removed\\line
-[ ] Surfaces swept and vacuumed\\line
-[ ] Windows cleaned (first pass)\\line
-[ ] Restrooms sanitized\\line\\line
-
-{\\b Phase 2 - Final Clean:}\\line
-[ ] Floors stripped and refinished\\line
-[ ] All windows cleaned inside/out\\line
-[ ] Fixtures polished\\line
-[ ] HVAC vents cleaned\\line
-[ ] Kitchen/break areas detailed\\line\\line
-
-{\\b Phase 3 - Touch-Up:}\\line
-[ ] Final inspection completed\\line
-[ ] Spot cleaning performed\\line
-[ ] Client walkthrough scheduled\\line
-[ ] Punch list items addressed\\line\\line
-
-{\\b\\fs28 PROFITABILITY ANALYSIS}\\line\\line
-Client Payment: ${formatCurrency(calculationResults.clientPrice)}\\line
-Less Vendor Payment: ${formatCurrency(calculationResults.vendorPayment)}\\line
-{\\b City Wide Profit: ${formatCurrency(calculationResults.grossProfit)}}\\line\\line
-
-{\\b Key Cost Drivers:}\\line
-- Labor: ${formatCurrency(calculationResults.totalLaborCost)} (${(calculationResults.totalLaborCost / calculationResults.totalCostToCW * 100).toFixed(1)}% of costs)\\line
-- Equipment: ${formatCurrency(calculationResults.totalEquipmentCost)} (${(calculationResults.totalEquipmentCost / calculationResults.totalCostToCW * 100).toFixed(1)}% of costs)\\line
-- Materials: ${formatCurrency(calculationResults.totalMaterialsCost)} (${(calculationResults.totalMaterialsCost / calculationResults.totalCostToCW * 100).toFixed(1)}% of costs)\\line\\line
-
-{\\b Risk Factors:}\\line
-- Condition worse than assessed\\line
-- Hidden areas requiring additional work\\line
-- Delays from other contractors\\line
-- Weather impacts on scheduling\\line
-- Quality callbacks\\line\\line
-
-{\\b Success Factors:}\\line
-- Experienced crew with proper equipment\\line
-- Clear communication with all parties\\line
-- Adequate time allocation per phase\\line
-- Quality control at each phase\\line
-- Proper floor finish application\\line
-}`;
+            let content = 'FACILITY SOLUTIONS MANAGER - COMPLETE JOB SUMMARY\n';
+            content += '='.repeat(50) + '\n\n';
+            content += `Service: Post-Construction Cleaning\n`;
+            content += `Location: ${calculationResults.sqft.toLocaleString()} sq ft ${document.getElementById('buildingType').selectedOptions[0].text}\n`;
+            content += `Generated: ${new Date().toLocaleString()}\n\n`;
             
-            downloadRTF(rtf, 'fsm-job-summary.rtf');
-        }
-
-        function generateScope() {
-            const rtf = `{\\rtf1\\ansi\\deff0 {\\fonttbl{\\f0 Times New Roman;}}
-\\f0\\fs24
-{\\b PROJECT SCOPE - POST-CONSTRUCTION CLEANING}\\line\\line
-Project: ${calculationResults.sqft.toLocaleString()} sq ft ${document.getElementById('buildingType').selectedOptions[0].text}\\line
-Date: ${new Date().toLocaleDateString()}\\line\\line
-
-{\\b SCOPE OF WORK}\\line\\line
-
-This scope defines the post-construction cleaning services to be provided by City Wide Facility Solutions for the above-referenced project.\\line\\line
-
-{\\b 1. PROJECT DETAILS}\\line
-- Total Square Footage: ${calculationResults.sqft.toLocaleString()} sq ft\\line
-- Building Type: ${document.getElementById('buildingType').selectedOptions[0].text}\\line
-- Number of Floors: ${document.getElementById('floors').value}\\line
-- Current Condition: ${document.getElementById('buildingCondition').selectedOptions[0].text}\\line\\line
-
-{\\b 2. SERVICES INCLUDED}\\line\\line
-
-${phases.rough ? `{\\b Phase 1 - Rough Clean:}\\line
-- Remove all construction debris, trash, and packaging materials\\line
-- Sweep and vacuum all floor surfaces\\line
-- Dust all horizontal and vertical surfaces\\line
-- Wipe down walls and remove marks/stains\\line
-- Clean and disinfect all restrooms\\line
-- Remove protective coverings from fixtures\\line\\line` : ''}
-
-${phases.final ? `{\\b Phase 2 - Final Clean:}\\line
-- Wet mop all hard floor surfaces\\line
-- Deep vacuum all carpeted areas with HEPA filtration\\line
-- Detail clean all doors, frames, and hardware\\line
-- Clean all HVAC vents, returns, and diffusers\\line
-- Sanitize all kitchens, break rooms, and appliances\\line
-- Clean and disinfect all restroom fixtures\\line
-- Polish all stainless steel and chrome surfaces\\line
-- Clean all baseboards and crown molding\\line
-- Vacuum and wipe all blinds/window treatments\\line\\line` : ''}
-
-${phases.touchup ? `{\\b Phase 3 - Touch-Up Clean:}\\line
-- Perform detailed quality inspection\\line
-- Address any areas requiring additional attention\\line
-- Remove fingerprints and smudges from all surfaces\\line
-- Touch-up clean as needed\\line
-- Prepare space for client inspection\\line
-- Complete final walkthrough checklist\\line\\line` : ''}
-
-{\\b 3. SERVICES EXPLICITLY EXCLUDED}\\line
-The following services are NOT included and must be quoted separately:\\line
-- Strip and Wax floor services\\line
-- Interior and exterior window cleaning\\line
-- Carpet cleaning/extraction services\\line
-- Pressure washing services\\line
-- High dusting above 20 feet\\line
-- Exterior building cleaning\\line
-- Upholstery cleaning\\line
-- Construction material disposal fees\\line\\line
-
-{\\b 4. EQUIPMENT AND MATERIALS}\\line
-City Wide will provide all necessary equipment and materials including:\\line
-- HEPA-filtered vacuums (${document.getElementById('hepaVacuums').value} units)\\line
-- Floor scrubbing equipment\\line
-- All cleaning chemicals and supplies\\line
-- Safety equipment and PPE\\line
-- Dust mop systems and cleaning carts\\line\\line
-
-{\\b 5. TIMELINE}\\line
-- Start Date: TBD\\line
-- Duration: ${calculationResults.totalDays} working days\\line
-- Working Hours: ${document.getElementById('timeOfService').selectedOptions[0].text}\\line
-- Crew Size: ${calculationResults.crewSize} workers\\line\\line
-
-{\\b 6. PRICING}\\line
-Total Project Price: ${formatCurrency(calculationResults.clientPrice)}\\line
-Price Per Square Foot: ${formatCurrencyDetailed(calculationResults.pricePerSqFt)}\\line
-Payment Terms: Net 30\\line\\line
-
-{\\b 7. EXCLUSIONS}\\line
-The following items are NOT included in this scope:\\line
-- Removal of hazardous materials\\line
-- Painting or drywall repair\\line
-- Electrical or plumbing work\\line
-- Moving furniture or equipment\\line
-- Disposal fees exceeding normal construction debris\\line\\line
-
-{\\b 8. CLIENT RESPONSIBILITIES}\\line
-- Provide access to all areas requiring cleaning\\line
-- Ensure utilities (water, electricity) are operational\\line
-- Remove or secure valuable items\\line
-- Provide designated area for waste disposal\\line
-- Clear work areas of ongoing construction\\line\\line
-
-{\\b 9. QUALITY ASSURANCE}\\line
-- Pre-service walkthrough to identify specific requirements\\line
-- Daily progress reporting\\line
-- Final inspection with client representative\\line
-- 48-hour callback guarantee\\line
-- Written completion certificate\\line\\line
-
-{\\b 10. INSURANCE AND COMPLIANCE}\\line
-- General Liability Insurance: $2,000,000\\line
-- Workers Compensation: As required by law\\line
-- All work performed to industry standards\\line
-- OSHA safety compliance\\line\\line
-
-{\\b 11. ACCEPTANCE}\\line\\line
-Client: _________________________  Date: __________\\line\\line
-City Wide: ______________________  Date: __________\\line
-}`;
+            content += 'JOB OVERVIEW\n';
+            content += '-'.repeat(30) + '\n';
+            content += `Square Footage: ${calculationResults.sqft.toLocaleString()} sq ft\n`;
+            content += `Building Type: ${document.getElementById('buildingType').selectedOptions[0].text}\n`;
+            content += `Condition: ${document.getElementById('buildingCondition').selectedOptions[0].text}\n`;
+            content += `Complexity: ${document.getElementById('buildingComplexity').selectedOptions[0].text}\n`;
+            content += `Floors: ${calculationResults.floors}\n`;
+            content += `Service Schedule: ${document.getElementById('timeOfService').selectedOptions[0].text}\n`;
+            content += `Total Hours: ${calculationResults.totalHours} hours\n`;
+            content += `Crew Size: ${calculationResults.crewSize} workers\n`;
+            content += `Duration: ${calculationResults.totalDays} days\n\n`;
             
-            downloadRTF(rtf, 'project-scope.rtf');
+            content += 'PRICING SUMMARY\n';
+            content += '-'.repeat(30) + '\n';
+            content += `Final Client Price: $${Math.round(calculationResults.clientPrice).toLocaleString()}\n`;
+            content += `Vendor Payment: $${Math.round(calculationResults.vendorPayment).toLocaleString()}\n`;
+            content += `City Wide Profit: $${Math.round(calculationResults.grossProfit).toLocaleString()}\n`;
+            content += `City Wide Margin: ${calculationResults.cityWideMargin}%\n`;
+            content += `Price Per Sq Ft: $${calculationResults.pricePerSqFt.toFixed(2)}\n\n`;
+            
+            content += 'COST BREAKDOWN\n';
+            content += '-'.repeat(30) + '\n';
+            content += `Labor Cost: $${Math.round(calculationResults.totalLaborCost).toLocaleString()}\n`;
+            content += `Equipment Cost: $${Math.round(calculationResults.totalEquipmentCost).toLocaleString()}\n`;
+            content += `Materials Cost: $${Math.round(calculationResults.totalMaterialsCost).toLocaleString()}\n`;
+            content += `Total Cost to CW: $${Math.round(calculationResults.totalCostToCW).toLocaleString()}\n\n`;
+            
+            content += 'PROVIDER SELECTIONS\n';
+            content += '-'.repeat(30) + '\n';
+            content += `Labor: ${providers.labor === 'vendor' ? 'Vendor (includes IC profit)' : 'In-House'}\n`;
+            content += `Equipment: ${providers.equipment === 'vendor' ? 'Vendor (includes IC profit)' : 'In-House'}\n\n`;
+            
+            content += 'LABOR RATES\n';
+            content += '-'.repeat(30) + '\n';
+            content += `Base Rate: $${calculationResults.laborRate.toFixed(2)}/hour\n`;
+            content += `Supervisor Rate: $${calculationResults.supervisorRate.toFixed(2)}/hour\n`;
+            content += `Specialist Rate: $${calculationResults.specialistRate.toFixed(2)}/hour\n`;
+            content += `IC Loaded Rate: $${calculationResults.loadedRate.toFixed(2)}/hour\n`;
+            content += `IC Profit: ${calculationResults.icProfit}%\n`;
+            content += `State Tax: ${calculationResults.stateTax}%\n\n`;
+            
+            if (calculationResults.phaseDetails) {
+                content += 'PHASE BREAKDOWN\n';
+                content += '-'.repeat(30) + '\n';
+                
+                if (calculationResults.phaseDetails.rough && phases.rough) {
+                    content += `Phase 1 - Rough Clean:\n`;
+                    content += `  Hours: ${calculationResults.phaseDetails.rough.hours}\n`;
+                    content += `  Days: ${calculationResults.phaseDetails.rough.days}\n`;
+                    content += `  Labor: $${Math.round(calculationResults.phaseDetails.rough.labor).toLocaleString()}\n`;
+                    content += `  Equipment: $${Math.round(calculationResults.phaseDetails.rough.equipment).toLocaleString()}\n\n`;
+                }
+                
+                if (calculationResults.phaseDetails.final && phases.final) {
+                    content += `Phase 2 - Final Clean:\n`;
+                    content += `  Hours: ${calculationResults.phaseDetails.final.hours}\n`;
+                    content += `  Days: ${calculationResults.phaseDetails.final.days}\n`;
+                    content += `  Labor: $${Math.round(calculationResults.phaseDetails.final.labor).toLocaleString()}\n`;
+                    content += `  Equipment: $${Math.round(calculationResults.phaseDetails.final.equipment).toLocaleString()}\n\n`;
+                }
+                
+                if (calculationResults.phaseDetails.touchup && phases.touchup) {
+                    content += `Phase 3 - Touch-Up:\n`;
+                    content += `  Hours: ${calculationResults.phaseDetails.touchup.hours}\n`;
+                    content += `  Days: ${calculationResults.phaseDetails.touchup.days}\n`;
+                    content += `  Labor: $${Math.round(calculationResults.phaseDetails.touchup.labor).toLocaleString()}\n`;
+                    content += `  Equipment: $${Math.round(calculationResults.phaseDetails.touchup.equipment).toLocaleString()}\n\n`;
+                }
+            }
+            
+            content += 'MARKET ADJUSTMENTS\n';
+            content += '-'.repeat(30) + '\n';
+            content += `Regional Market: ${document.getElementById('region').selectedOptions[0].text}\n`;
+            content += `Competition Level: ${document.getElementById('competitionLevel').selectedOptions[0].text}\n`;
+            content += `Service Schedule: ${document.getElementById('timeOfService').selectedOptions[0].text}\n`;
+            
+            // Download as text file
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'fsm-job-summary.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
         }
     </script>
 </body>
