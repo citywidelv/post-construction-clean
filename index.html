@@ -828,7 +828,7 @@
             </div>
         </div>
 
-        <!-- Export Options - Simplified -->
+        <!-- Export Options -->
         <div class="card">
             <h2>Export Options</h2>
             <div class="export-section">
@@ -1085,6 +1085,7 @@
             let totalLaborCost = 0;
             let totalBaseLaborCost = 0;
             let totalEquipmentCost = 0;
+            let totalPhaseClientPrice = 0;
             
             // Store phase details for export
             let phaseDetails = {};
@@ -1106,8 +1107,26 @@
                         (specialists * specialistLoaded)
                     ) / crewSize;
                     
-                    const phaseLaborCost = phaseCalc.hours * averageRate * timeMultiplier;
-                    const phaseEquipment = calculateEquipmentCost(phase, phaseDays);
+                    let phaseLaborCost = phaseCalc.hours * averageRate * timeMultiplier;
+                    let phaseEquipment = calculateEquipmentCost(phase, phaseDays);
+                    
+                    // Apply provider-specific markups
+                    if (providers.labor === 'vendor') {
+                        phaseLaborCost *= 1.10; // Add 10% IC profit
+                    }
+                    if (providers.equipment === 'vendor') {
+                        phaseEquipment *= 1.10; // Add 10% IC profit
+                    }
+                    
+                    // Apply regional and competition adjustments
+                    phaseLaborCost *= regionalMultiplier * competitionAdjustment;
+                    phaseEquipment *= regionalMultiplier * competitionAdjustment;
+                    
+                    // Calculate phase cost to City Wide
+                    const phaseCostToCW = phaseLaborCost + phaseEquipment;
+                    
+                    // Apply City Wide margin to get client price
+                    const phaseClientPrice = phaseCostToCW / (1 - cityWideMargin / 100);
                     
                     phaseDetails[phase] = {
                         hours: Math.round(phaseCalc.hours),
@@ -1115,7 +1134,9 @@
                         labor: phaseLaborCost,
                         equipment: phaseEquipment,
                         materials: phaseMaterials,
-                        days: phaseDays
+                        days: phaseDays,
+                        costToCW: phaseCostToCW,
+                        clientPrice: phaseClientPrice
                     };
                     
                     // Update display
@@ -1124,11 +1145,12 @@
                     document.getElementById(`${phase}Labor`).textContent = formatCurrency(phaseLaborCost);
                     document.getElementById(`${phase}Equipment`).textContent = formatCurrency(phaseEquipment);
                     document.getElementById(`${phase}Materials`).textContent = formatCurrency(phaseMaterials);
-                    document.getElementById(`${phase}Total`).textContent = formatCurrency(phaseLaborCost + phaseEquipment);
+                    document.getElementById(`${phase}Total`).textContent = formatCurrency(phaseClientPrice);
                     
                     totalHours += phaseCalc.hours;
                     totalLaborCost += phaseLaborCost;
                     totalEquipmentCost += phaseEquipment;
+                    totalPhaseClientPrice += phaseClientPrice;
                 } else {
                     document.getElementById(`${phase}Hours`).textContent = '0';
                     document.getElementById(`${phase}Rate`).textContent = 'N/A';
@@ -1141,18 +1163,9 @@
             
             const totalMaterialsCost = totalBaseLaborCost * 0.10;
             
-            if (providers.labor === 'vendor') {
-                totalLaborCost *= 1.10;
-            }
-            if (providers.equipment === 'vendor') {
-                totalEquipmentCost *= 1.10;
-            }
-            
-            totalLaborCost *= regionalMultiplier * competitionAdjustment;
-            totalEquipmentCost *= regionalMultiplier * competitionAdjustment;
-            
+            // Use the sum of phase client prices as the final client price
+            const clientPrice = totalPhaseClientPrice;
             const totalCostToCW = totalLaborCost + totalEquipmentCost;
-            const clientPrice = totalCostToCW / (1 - cityWideMargin / 100);
             const grossProfit = clientPrice - totalCostToCW;
             const vendorPayment = totalCostToCW;
             const totalDays = Math.ceil(totalHours / (crewSize * 8));
@@ -1205,7 +1218,7 @@
             };
         }
 
-        // Simple export functions
+        // Export functions
         function exportVendorSpecs() {
             let content = 'VENDOR SPECIFICATIONS - POST-CONSTRUCTION CLEANING\n';
             content += '='.repeat(50) + '\n\n';
@@ -1262,7 +1275,7 @@
         
         function exportFSMSummary() {
             let content = 'FACILITY SOLUTIONS MANAGER - COMPLETE JOB SUMMARY\n';
-            content += '='.repeat(50) + '\n\n';
+            content += '='.repeat(60) + '\n\n';
             content += `Service: Post-Construction Cleaning\n`;
             content += `Location: ${calculationResults.sqft.toLocaleString()} sq ft ${document.getElementById('buildingType').selectedOptions[0].text}\n`;
             content += `Generated: ${new Date().toLocaleString()}\n\n`;
@@ -1282,66 +1295,110 @@
             content += 'PRICING SUMMARY\n';
             content += '-'.repeat(30) + '\n';
             content += `Final Client Price: $${Math.round(calculationResults.clientPrice).toLocaleString()}\n`;
-            content += `Vendor Payment: $${Math.round(calculationResults.vendorPayment).toLocaleString()}\n`;
-            content += `City Wide Profit: $${Math.round(calculationResults.grossProfit).toLocaleString()}\n`;
+            content += `Total Vendor Payment: $${Math.round(calculationResults.vendorPayment).toLocaleString()}\n`;
+            content += `City Wide Gross Profit: $${Math.round(calculationResults.grossProfit).toLocaleString()}\n`;
             content += `City Wide Margin: ${calculationResults.cityWideMargin}%\n`;
             content += `Price Per Sq Ft: $${calculationResults.pricePerSqFt.toFixed(2)}\n\n`;
             
-            content += 'COST BREAKDOWN\n';
+            content += 'VENDOR PAYMENT STRUCTURE\n';
             content += '-'.repeat(30) + '\n';
-            content += `Labor Cost: $${Math.round(calculationResults.totalLaborCost).toLocaleString()}\n`;
-            content += `Equipment Cost: $${Math.round(calculationResults.totalEquipmentCost).toLocaleString()}\n`;
-            content += `Materials Cost: $${Math.round(calculationResults.totalMaterialsCost).toLocaleString()}\n`;
-            content += `Total Cost to CW: $${Math.round(calculationResults.totalCostToCW).toLocaleString()}\n\n`;
-            
-            content += 'PROVIDER SELECTIONS\n';
-            content += '-'.repeat(30) + '\n';
-            content += `Labor: ${providers.labor === 'vendor' ? 'Vendor (includes IC profit)' : 'In-House'}\n`;
-            content += `Equipment: ${providers.equipment === 'vendor' ? 'Vendor (includes IC profit)' : 'In-House'}\n\n`;
-            
-            content += 'LABOR RATES\n';
-            content += '-'.repeat(30) + '\n';
-            content += `Base Rate: $${calculationResults.laborRate.toFixed(2)}/hour\n`;
-            content += `Supervisor Rate: $${calculationResults.supervisorRate.toFixed(2)}/hour\n`;
-            content += `Specialist Rate: $${calculationResults.specialistRate.toFixed(2)}/hour\n`;
+            content += `Labor Provider: ${providers.labor === 'vendor' ? 'Vendor (includes IC profit)' : 'In-House'}\n`;
+            content += `Equipment Provider: ${providers.equipment === 'vendor' ? 'Vendor (includes IC profit)' : 'In-House'}\n`;
+            content += `Base Labor Rate: $${calculationResults.laborRate.toFixed(2)}/hour\n`;
             content += `IC Loaded Rate: $${calculationResults.loadedRate.toFixed(2)}/hour\n`;
-            content += `IC Profit: ${calculationResults.icProfit}%\n`;
+            content += `IC Profit Percentage: ${calculationResults.icProfit}%\n`;
             content += `State Tax: ${calculationResults.stateTax}%\n\n`;
             
+            content += 'SITE CONDITIONS & CHALLENGES\n';
+            content += '-'.repeat(30) + '\n';
+            content += `Building Condition: ${document.getElementById('buildingCondition').selectedOptions[0].text}\n`;
+            content += `Complexity Level: ${document.getElementById('buildingComplexity').selectedOptions[0].text}\n`;
+            content += `Regional Market: ${document.getElementById('region').selectedOptions[0].text}\n`;
+            content += `Competition Level: ${document.getElementById('competitionLevel').selectedOptions[0].text}\n`;
+            content += `Service Timing: ${document.getElementById('timeOfService').selectedOptions[0].text}\n\n`;
+            
             if (calculationResults.phaseDetails) {
-                content += 'PHASE BREAKDOWN\n';
+                content += 'PHASE-BY-PHASE BREAKDOWN\n';
                 content += '-'.repeat(30) + '\n';
                 
                 if (calculationResults.phaseDetails.rough && phases.rough) {
-                    content += `Phase 1 - Rough Clean:\n`;
-                    content += `  Hours: ${calculationResults.phaseDetails.rough.hours}\n`;
-                    content += `  Days: ${calculationResults.phaseDetails.rough.days}\n`;
-                    content += `  Labor: $${Math.round(calculationResults.phaseDetails.rough.labor).toLocaleString()}\n`;
-                    content += `  Equipment: $${Math.round(calculationResults.phaseDetails.rough.equipment).toLocaleString()}\n\n`;
+                    content += `PHASE 1 - ROUGH CLEAN:\n`;
+                    content += `  Labor Hours: ${calculationResults.phaseDetails.rough.hours}\n`;
+                    content += `  Production Rate: ${calculationResults.phaseDetails.rough.rate} sq ft/hr\n`;
+                    content += `  Duration: ${calculationResults.phaseDetails.rough.days} days\n`;
+                    content += `  Labor Cost: $${Math.round(calculationResults.phaseDetails.rough.labor).toLocaleString()}\n`;
+                    content += `  Equipment Cost: $${Math.round(calculationResults.phaseDetails.rough.equipment).toLocaleString()}\n`;
+                    content += `  Client Price: $${Math.round(calculationResults.phaseDetails.rough.clientPrice).toLocaleString()}\n\n`;
                 }
                 
                 if (calculationResults.phaseDetails.final && phases.final) {
-                    content += `Phase 2 - Final Clean:\n`;
-                    content += `  Hours: ${calculationResults.phaseDetails.final.hours}\n`;
-                    content += `  Days: ${calculationResults.phaseDetails.final.days}\n`;
-                    content += `  Labor: $${Math.round(calculationResults.phaseDetails.final.labor).toLocaleString()}\n`;
-                    content += `  Equipment: $${Math.round(calculationResults.phaseDetails.final.equipment).toLocaleString()}\n\n`;
+                    content += `PHASE 2 - FINAL CLEAN:\n`;
+                    content += `  Labor Hours: ${calculationResults.phaseDetails.final.hours}\n`;
+                    content += `  Production Rate: ${calculationResults.phaseDetails.final.rate} sq ft/hr\n`;
+                    content += `  Duration: ${calculationResults.phaseDetails.final.days} days\n`;
+                    content += `  Labor Cost: $${Math.round(calculationResults.phaseDetails.final.labor).toLocaleString()}\n`;
+                    content += `  Equipment Cost: $${Math.round(calculationResults.phaseDetails.final.equipment).toLocaleString()}\n`;
+                    content += `  Client Price: $${Math.round(calculationResults.phaseDetails.final.clientPrice).toLocaleString()}\n\n`;
                 }
                 
                 if (calculationResults.phaseDetails.touchup && phases.touchup) {
-                    content += `Phase 3 - Touch-Up:\n`;
-                    content += `  Hours: ${calculationResults.phaseDetails.touchup.hours}\n`;
-                    content += `  Days: ${calculationResults.phaseDetails.touchup.days}\n`;
-                    content += `  Labor: $${Math.round(calculationResults.phaseDetails.touchup.labor).toLocaleString()}\n`;
-                    content += `  Equipment: $${Math.round(calculationResults.phaseDetails.touchup.equipment).toLocaleString()}\n\n`;
+                    content += `PHASE 3 - TOUCH-UP:\n`;
+                    content += `  Labor Hours: ${calculationResults.phaseDetails.touchup.hours}\n`;
+                    content += `  Production Rate: ${calculationResults.phaseDetails.touchup.rate} sq ft/hr\n`;
+                    content += `  Duration: ${calculationResults.phaseDetails.touchup.days} days\n`;
+                    content += `  Labor Cost: $${Math.round(calculationResults.phaseDetails.touchup.labor).toLocaleString()}\n`;
+                    content += `  Equipment Cost: $${Math.round(calculationResults.phaseDetails.touchup.equipment).toLocaleString()}\n`;
+                    content += `  Client Price: $${Math.round(calculationResults.phaseDetails.touchup.clientPrice).toLocaleString()}\n\n`;
                 }
             }
             
-            content += 'MARKET ADJUSTMENTS\n';
+            content += 'VENDOR QUESTIONS TO ASK\n';
             content += '-'.repeat(30) + '\n';
-            content += `Regional Market: ${document.getElementById('region').selectedOptions[0].text}\n`;
-            content += `Competition Level: ${document.getElementById('competitionLevel').selectedOptions[0].text}\n`;
-            content += `Service Schedule: ${document.getElementById('timeOfService').selectedOptions[0].text}\n`;
+            content += '1. Do you have experience with post-construction cleaning projects of this size?\n';
+            content += '2. Can you provide references from similar commercial cleaning projects?\n';
+            content += '3. What is your approach to dust control and HVAC system cleaning?\n';
+            content += '4. Do you carry adequate insurance for this type of work?\n';
+            content += '5. How do you handle debris disposal and dumpster coordination?\n';
+            content += '6. What quality control measures do you have in place?\n';
+            content += '7. Can you work around the specified schedule and timeline?\n\n';
+            
+            content += 'CLIENT COMMUNICATION POINTS\n';
+            content += '-'.repeat(30) + '\n';
+            content += '- Confirm all construction work is complete before cleaning begins\n';
+            content += '- Ensure utilities (water, electricity, HVAC) are operational\n';
+            content += '- Remove any remaining construction materials or personal items\n';
+            content += '- Provide access to all areas requiring cleaning\n';
+            content += '- Coordinate with building management for elevator and loading dock access\n';
+            content += '- Plan for final walkthrough and sign-off after each phase\n\n';
+            
+            content += 'SCHEDULING CONSIDERATIONS\n';
+            content += '-'.repeat(30) + '\n';
+            content += '- Phase 1 (Rough Clean): Can begin once construction debris is manageable\n';
+            content += '- Phase 2 (Final Clean): After all trades work is complete\n';
+            content += '- Phase 3 (Touch-Up): Just before final inspection or occupancy\n';
+            content += '- Allow 1-2 days between phases for trades to address any remaining items\n';
+            content += '- Consider weather conditions for debris removal and dumpster access\n';
+            content += '- Coordinate with building inspections and certificate of occupancy timeline\n\n';
+            
+            content += 'QUALITY ASSURANCE CHECKLIST\n';
+            content += '-'.repeat(30) + '\n';
+            content += '- All surfaces dust-free and wiped clean\n';
+            content += '- Floors swept, mopped, and free of debris\n';
+            content += '- Windows and glass surfaces streak-free\n';
+            content += '- HVAC vents and returns cleaned and operational\n';
+            content += '- Light fixtures cleaned and bulbs functioning\n';
+            content += '- Restrooms fully stocked and sanitized\n';
+            content += '- All trash removed and disposal areas clean\n';
+            content += '- Client walkthrough completed with sign-off\n\n';
+            
+            content += 'PROFITABILITY ANALYSIS\n';
+            content += '-'.repeat(30) + '\n';
+            content += `Client Payment: ${Math.round(calculationResults.clientPrice).toLocaleString()}\n`;
+            content += `Vendor Payment: ${Math.round(calculationResults.vendorPayment).toLocaleString()}\n`;
+            content += `City Wide Profit: ${Math.round(calculationResults.grossProfit).toLocaleString()}\n`;
+            content += `Profit Margin: ${calculationResults.cityWideMargin}%\n`;
+            content += `Efficiency Target: Complete within ${calculationResults.totalDays} days\n`;
+            content += `Key Success Factors: Proper scheduling, quality execution, client satisfaction\n`;
             
             // Download as text file
             const blob = new Blob([content], { type: 'text/plain' });
