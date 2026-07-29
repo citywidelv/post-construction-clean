@@ -189,7 +189,7 @@ body{
       <div class="cfield"><label>Chemicals Provided By</label>
         <select id="chemProvider" onchange="recalc()">
           <option value="vendor">Crew Provides (their cost + 15%)</option>
-          <option value="cw">City Wide (tolled at our cost)</option>
+          <option value="cw">City Wide Supplies</option>
         </select>
       </div>
       <div class="cfield"><label>Wage Basis</label>
@@ -359,7 +359,7 @@ const SERVICES=[
  {id:'highwork', name:'High Work from Lift', sub:'High glass, ledges, exposed structure, duct runs. Lift rental passed through', ico:'lift', unit:'hours',
   perHr:1, equip:8, crew1:false, flatCost:400, wageAdj:1.15, chems:['hoursup'], mktUnit:[55,95], floorUnit:50,
   qtyHelp:'Type LABOR HOURS in the lift (both techs count: a 4-hour lift session with 2 techs is 8 hours). Put the lift rental quote in the flat cost box below.',
-  desc:'Anything above 12 feet: clerestory glass, atrium ledges, exposed structure and duct dusting, high fixtures. Lift work runs at half normal production with an operator and spotter, both trained. The rental (scissor $100-400/day, boom $200-1,500/day, delivery each way) goes in the flat pass-through at cost.'},
+  desc:'Anything above 12 feet: clerestory glass, atrium ledges, exposed structure and duct dusting, high fixtures. Lift work runs at half normal production with an operator and spotter, both trained. The rental (scissor $100-400/day, boom $200-1,500/day, delivery each way) goes in the cost box and prices through the margin chain.'},
  {id:'garage', name:'Garage & Site Sweep', sub:'Parking decks and site concrete, swept and detailed', ico:'garage',
   rate:3000, equip:8, crew1:false, chems:['roughsup'], mkt:[0.03,0.10], floorRate:0.025,
   qtyHelp:'SF of garage deck or site concrete to sweep and dust down.',
@@ -477,9 +477,9 @@ function priceService(s){
   const margin=(!isNaN(svcOv)&&svcOv>0)?svcOv:(!isNaN(ov)&&ov>0)?ov:(isUnit?36:autoMargin(qty));
   let price=totalCost/(1-margin/100)*region.mult;
   const unitFloor=sd?sd.floor:(isUnit?s.floorUnit:s.floorRate);
-  if(unitFloor&&!pw)price=Math.max(price, qty*unitFloor*region.mult+flatCost/(1-margin/100));
+  if(unitFloor&&!pw)price=Math.max(price, qty*unitFloor*region.mult+(inhouse?flatCost:flatCost/(1-IC_MARGIN))/(1-margin/100));
   const rateOv=parseFloat(st.rateOv);
-  if(!isNaN(rateOv)&&rateOv>0)price=qty*rateOv+flatCost/(1-margin/100);
+  if(!isNaN(rateOv)&&rateOv>0)price=qty*rateOv+(inhouse?flatCost:flatCost/(1-IC_MARGIN))/(1-margin/100);
 
   const mktArr=sd?sd.mkt:(isUnit?s.mktUnit:s.mkt);
   const mktLow=mktArr[0]*region.mult, mktHigh=mktArr[1]*region.mult;
@@ -522,7 +522,7 @@ function renderServices(){
       +'<div class="field"><label>Site Condition</label><select onchange="setSvc(\''+s.id+'\',\'cond\',this.value)">'+CONDITIONS.map(c=>'<option value="'+c.k+'"'+((st.cond||'heavy')===c.k?' selected':'')+'>'+c.label+'</option>').join('')+'</select><small>Grade what you SAW on the walk. Heavy residue runs 40% slower and burns more supplies.</small></div>'
       +'<div class="field"><label>Wage Override $/hr (blank = '+(pw?'wage determination':'market')+')</label><input type="number" step="0.5" value="'+(st.wage||'')+'" placeholder="'+wagePH+'" onchange="setSvc(\''+s.id+'\',\'wage\',this.value)"><small>'+(pw?'Seeded from the prevailing wage package up top. Override only with the actual WD rate for this classification.':'Regional market rate for construction clean-up labor.')+'</small></div>'
       +'<div class="field"><label>Equipment $/hr</label><input type="number" step="1" value="'+(st.equip||'')+'" placeholder="'+s.equip+'" onchange="setSvc(\''+s.id+'\',\'equip\',this.value)"><small>Machines, HEPA vacs, tools. Not the lift: that goes in the flat cost box.</small></div>'
-      +'<div class="field"><label>Flat Cost Pass-Through $ (lift rental, special equipment)</label><input type="number" step="10" value="'+(('flat' in st)?st.flat:'')+'" placeholder="'+(s.flatCost||0)+'" onchange="setSvc(\''+s.id+'\',\'flat\',this.value)"><small>Type the RENTAL QUOTE here: lift + delivery, at cost. Margin applies to work, never to rented steel.</small></div>'
+      +'<div class="field"><label>Lift &amp; Equipment Costs $ (rental, special equipment)</label><input type="number" step="10" value="'+(('flat' in st)?st.flat:'')+'" placeholder="'+(s.flatCost||0)+'" onchange="setSvc(\''+s.id+'\',\'flat\',this.value)"><small>Type the RENTAL QUOTE here: lift + delivery, at cost. Margin applies to work, never to rented steel.</small></div>'
       +'<div class="field"><label>'+(s.unit?'Price per '+s.unit.replace(/s$/,'')+' Override':'Rate/SF Override')+'</label><input type="number" step="0.01" value="'+(st.rateOv||'')+'" placeholder="auto build-up" onchange="setSvc(\''+s.id+'\',\'rateOv\',this.value)"><small>Bypasses the build-up. Use it when you have a firm number from the dedicated calculator or a vendor quote.</small></div>'
       +'<div class="field"><label>Service Margin % Override</label><input type="number" value="'+(st.margin||'')+'" placeholder="auto '+(s.unit?36:(st.sf?autoMargin(parseFloat(st.sf)||0):'32-40'))+'" onchange="setSvc(\''+s.id+'\',\'margin\',this.value)"></div>'
       +'</div>';
@@ -585,7 +585,7 @@ function renderShopping(results){
     });
     if(r.flatCost){
       const k='Lift / special equipment ('+r.s.name+')';
-      agg[k]={prod:k,packLabel:'pass-through at cost',packPrice:r.flatCost,cost:r.flatCost};
+      agg[k]={prod:k,packLabel:'cost line (margin applies)',packPrice:r.flatCost,cost:r.flatCost};
     }
     if(r.compCost){
       const k2='Certified payroll compliance';
@@ -735,7 +735,7 @@ function renderRates(){
   +'<tr><td>Crew company margin</td><td>'+(IC_MARGIN*100)+'%</td><td>Margin basis, cost divided by 0.92: the crew keeps 8% of their check, exactly the Bid Calculator IC margin line.</td></tr>'
   +'<tr><td>City Wide margin</td><td>32-40%</td><td>Auto by job size, divide basis. Override with a reason.</td></tr>'
   +'<tr><td>Minimums</td><td>$500 job ($150 go-back visits)</td><td>Half-day crew reality. Lead service only on multi-service bids.</td></tr>'
-  +'<tr><td>Pass-throughs</td><td>At cost</td><td>Lifts, roll-offs, special equipment: margin applies to work, not rentals.</td></tr></table>'
+  +'<tr><td>Lift and equipment costs</td><td>Margin applies</td><td>Lifts, roll-offs and special equipment enter at our cost and price through the same chain as labor.</td></tr></table>'
   +'<h2>Stays Cohesive with the Other Calculators</h2>'
   +'<table><tr><th>Line in This Tool</th><th>Dedicated Calculator</th><th>Rule</th></tr>'
   +'<tr><td>Post-Construction Window Cleaning</td><td>Window Cleaning</td><td>Same pane counting, same sides toggle, same rates and floors.</td></tr>'
