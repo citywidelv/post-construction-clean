@@ -165,6 +165,7 @@ body{
     <div class="hdr-actions">
       <button class="hdr-btn" id="userBtn" onclick="changeUser()">Set Your Name</button>
       <button class="hdr-btn" onclick="openSaves()">Saved Work</button>
+      <button class="hdr-btn" onclick="resetAll()">Clear All Fields</button>
     </div>
   </div>
   <div class="tabs">
@@ -296,12 +297,13 @@ function money2(n){return '$'+n.toFixed(2)}
 /* ---------- REGIONS. Standard wages: ZipRecruiter construction clean-up July 2026 (LV $19.68 avg, Reno $20.87).
    PW packages: NV Labor Commissioner 2025-2026 books (Clark Laborer Grp 1 $72.12 total; Washoe $53.03).
    Since April 2026, federal Davis-Bacon jobs in Nevada use the STATE rates (retroactive 10/1/2025). ---------- */
+/* July 29, 2026 pay policy update: technician wages raised - techs $25+/hr, difficult floor work $30/hr, supervisors default $35/hr (editable per service). */
 const REGIONS={
-  lv:   {label:'Las Vegas',          wage:19.75, pwBase:38.53, pwFringe:33.59, mult:1.00, note:'Clark County. Prevailing wage package here is one of the richest in the country: $72.12/hr total for a cleanup laborer. Never bid a public job at private rates.'},
-  reno: {label:'Reno / Sparks',      wage:20.90, pwBase:33.95, pwFringe:19.08, mult:1.08, note:'Washoe County. PW package $53.03/hr total. Private wages run about $1.20/hr over LV and the crew pool is thin.'},
-  carson:{label:'Carson City',       wage:20.90, pwBase:33.95, pwFringe:19.08, mult:1.08, note:'Carson sits in the Northern Rural PW region: verify the current book, seeded here with the Washoe package as the close proxy.'},
-  tric: {label:'TRIC / USA Parkway', wage:22.50, pwBase:33.95, pwFringe:19.08, mult:1.15, note:'Storey County, Northern Rural PW region (verify the book). Badging, deadhead, and zero on-corridor crews: the premium is real. Watch for the Clark Zone 2 logic on rural PW jobs.'},
-  az:   {label:'Arizona Border',     wage:18.50, pwBase:20.00, pwFringe:5.00,  mult:1.05, note:'Arizona uses FEDERAL Davis-Bacon determinations, not Nevada rates: pull the current WD for the county on SAM.gov before quoting. Seeds here are placeholders.'}
+  lv:   {label:'Las Vegas',          wage:25.00, pwBase:38.53, pwFringe:33.59, mult:1.00, note:'Clark County. Prevailing wage package here is one of the richest in the country: $72.12/hr total for a cleanup laborer. Never bid a public job at private rates.'},
+  reno: {label:'Reno / Sparks',      wage:26.00, pwBase:33.95, pwFringe:19.08, mult:1.08, note:'Washoe County. PW package $53.03/hr total. Private wages run about $1.20/hr over LV and the crew pool is thin.'},
+  carson:{label:'Carson City',       wage:26.00, pwBase:33.95, pwFringe:19.08, mult:1.08, note:'Carson sits in the Northern Rural PW region: verify the current book, seeded here with the Washoe package as the close proxy.'},
+  tric: {label:'TRIC / USA Parkway', wage:27.50, pwBase:33.95, pwFringe:19.08, mult:1.15, note:'Storey County, Northern Rural PW region (verify the book). Badging, deadhead, and zero on-corridor crews: the premium is real. Watch for the Clark Zone 2 logic on rural PW jobs.'},
+  az:   {label:'Arizona Border',     wage:25.00, pwBase:20.00, pwFringe:5.00,  mult:1.05, note:'Arizona uses FEDERAL Davis-Bacon determinations, not Nevada rates: pull the current WD for the county on SAM.gov before quoting. Seeds here are placeholders.'}
 };
 
 /* ---------- CONSUMABLES & PASS-THROUGH RATES (2026 street prices). perUnit = $ per SF, pane, hour, or load. ---------- */
@@ -373,6 +375,7 @@ const CONDITIONS=[{k:'good',label:'Broom-Clean & Light Dust',lab:0.85,chem:0.85}
 const FREQS=[[1,'One-time (standard for post-con)']];
 
 /* Rate factors, matched to the Bid Calculator Step 1b */
+const SUP_WAGE=35;      /* working supervisor default $/hr, editable on every service */
 const BURDEN=0.15;
 const INCIDENTALS=0.04;
 const IC_MARGIN=0.08;
@@ -400,6 +403,7 @@ let S={svcOn:{}, inputs:{}, user:localStorage.getItem('cwpc_user')||''};
 let CHEMS=JSON.parse(JSON.stringify(DEFAULT_CHEMS));
 try{const saved=localStorage.getItem('cwpc_chems'); if(saved){const p=JSON.parse(saved); Object.keys(CHEMS).forEach(k=>{if(p[k]&&typeof p[k].perUnit==='number')CHEMS[k].perUnit=p[k].perUnit;});}}catch(e){}
 function setSvc(id,field,val){if(!S.inputs[id])S.inputs[id]={};S.inputs[id][field]=val;recalc();autosaveSoon();}
+function autoCrew(s,st){const q=parseFloat(st&&st.sf)||0;return s.crew1?1:(q>15000?4:2);}
 function isPW(){return $('wageBasis').value==='pw';}
 function pwRates(){
   const region=REGIONS[$('region').value];
@@ -424,7 +428,8 @@ function priceService(s){
   /* 1. hours */
   let manHrs=isUnit? qty/(sd?sd.perHr:s.perHr)*cond.lab : qty/(sd?sd.perHr:s.rate)*cond.lab;
   manHrs=Math.max(manHrs,2);
-  const crew=s.crew1?1:(qty>15000?4:2);
+  const crewOv=parseInt(st.crew);
+  const crew=(!isNaN(crewOv)&&crewOv>0)?crewOv:autoCrew(s,st);
   const clockHrs=manHrs/crew;
 
   /* 2. wages: standard or prevailing */
@@ -444,6 +449,13 @@ function priceService(s){
     laborCost=manHrs*wage*(1+BURDEN);
     wageLabel=money2(wage)+'/hr';
   }
+
+  const techLabor=laborCost;
+  const supN=Math.max(0,parseInt(st.sup)||0);
+  const supWage=parseFloat(st.supWage)||SUP_WAGE;
+  const supHrs=supN*clockHrs;
+  const supCost=supHrs*supWage*(1+BURDEN);
+  laborCost=techLabor+supCost;
 
   /* 3. compliance + incidentals */
   const compCost=pw?laborCost*PW_COMPLIANCE:0;
@@ -483,7 +495,7 @@ function priceService(s){
 
   const mktArr=sd?sd.mkt:(isUnit?s.mktUnit:s.mkt);
   const mktLow=mktArr[0]*region.mult, mktHigh=mktArr[1]*region.mult;
-  return {s,sf:qty,isUnit,sidesLabel,cond,events:1,manHrs,crew,clockHrs,wage,wageLabel,pw,laborCost,compCost,incCost,chems,chemCost,cwChems,vendorChems,equipCost,flatCost,vendorBase,vendorCost,inhouse,totalCost,margin,price,perSF:(price-flatCost)/qty,mktLow,mktHigh};
+  return {s,sf:qty,isUnit,sidesLabel,cond,events:1,manHrs,crew,clockHrs,wage,wageLabel,pw,laborCost,techLabor,supN,supWage,supHrs,supCost,compCost,incCost,chems,chemCost,cwChems,vendorChems,equipCost,flatCost,vendorBase,vendorCost,inhouse,totalCost,margin,price,perSF:(price-flatCost)/qty,mktLow,mktHigh};
 }
 function activeResults(){return SERVICES.filter(s=>!s.group&&S.svcOn[s.id]).map(priceService).filter(Boolean);}
 function applyMinimums(results){
@@ -520,6 +532,9 @@ function renderServices(){
       +'<div class="field"><label>'+qtyLabel+'</label><input type="number" value="'+(st.sf||'')+'" placeholder="'+(s.unit?(s.unit==='hours'?'e.g. 8':'e.g. 120'):'e.g. 12000')+'" onchange="setSvc(\''+s.id+'\',\'sf\',this.value)"><small>'+(s.qtyHelp||'')+'</small></div>'
       +(s.sides?'<div class="field"><label>Which Sides Are We Cleaning?</label><div style="padding-top:3px">'+['out','inn','both'].map(function(k){var cur=(st.sides||s.sideDefault);return '<span class="chip '+(cur===k?'sel':'')+'" onclick="setSvc(\''+s.id+'\',\'sides\',\''+k+'\')">'+s.sideDef[k].label+'</span>';}).join('')+'</div></div>':'')
       +'<div class="field"><label>Site Condition</label><select onchange="setSvc(\''+s.id+'\',\'cond\',this.value)">'+CONDITIONS.map(c=>'<option value="'+c.k+'"'+((st.cond||'heavy')===c.k?' selected':'')+'>'+c.label+'</option>').join('')+'</select><small>Grade what you SAW on the walk. Heavy residue runs 40% slower and burns more supplies.</small></div>'
+      +'<div class="field"><label>Techs on This Job</label><input type="number" min="1" step="1" value="'+(st.crew||'')+'" placeholder="auto: '+autoCrew(s,st)+'" onchange="setSvc(\''+s.id+'\',\'crew\',this.value)"><small>Crew members working this line. Auto-sized from the job. Type over it when the method sets the crew (auto scrubber work always runs 2).</small></div>'
+      +'<div class="field"><label>Supervisors on Site</label><input type="number" min="0" step="1" value="'+(st.sup||'')+'" placeholder="0" onchange="setSvc(\''+s.id+'\',\'sup\',this.value)"><small>On-site supervisor billed for the full visit. Leave 0 for none.</small></div>'
+      +'<div class="field"><label>Supervisor $/hr</label><input type="number" step="0.5" value="'+(st.supWage||'')+'" placeholder="'+SUP_WAGE.toFixed(2)+'" onchange="setSvc(\''+s.id+'\',\'supWage\',this.value)"></div>'
       +'<div class="field"><label>Wage Override $/hr (blank = '+(pw?'wage determination':'market')+')</label><input type="number" step="0.5" value="'+(st.wage||'')+'" placeholder="'+wagePH+'" onchange="setSvc(\''+s.id+'\',\'wage\',this.value)"><small>'+(pw?'Seeded from the prevailing wage package up top. Override only with the actual WD rate for this classification.':'Regional market rate for construction clean-up labor.')+'</small></div>'
       +'<div class="field"><label>Equipment $/hr</label><input type="number" step="1" value="'+(st.equip||'')+'" placeholder="'+s.equip+'" onchange="setSvc(\''+s.id+'\',\'equip\',this.value)"><small>Machines, HEPA vacs, tools. Not the lift: that goes in the flat cost box.</small></div>'
       +'<div class="field"><label>Lift &amp; Equipment Costs $ (rental, special equipment)</label><input type="number" step="10" value="'+(('flat' in st)?st.flat:'')+'" placeholder="'+(s.flatCost||0)+'" onchange="setSvc(\''+s.id+'\',\'flat\',this.value)"><small>Type the RENTAL QUOTE here: lift + delivery, at cost. Margin applies to work, never to rented steel.</small></div>'
@@ -532,7 +547,8 @@ function renderServices(){
           ?'<span style="color:var(--cw-grey)">private-market band shown for reference only: PW jobs price from the wage determination</span>'
           :(r.perSF>=r.mktLow&&r.perSF<=r.mktHigh?'<span class="mktflag ok">inside market range</span>':(r.perSF<r.mktLow?'<span class="mktflag warn">below market, room to hold price</span>':'<span class="mktflag warn">above market, check inputs or expect pushback</span>'));
         body+='<div class="buildup">'
-        +'<div class="bl"><span>Crew labor: '+r.manHrs.toFixed(1)+' labor-hrs ('+r.crew+' crew x '+r.clockHrs.toFixed(1)+' hrs) @ '+r.wageLabel+' + '+(BURDEN*100)+'% payroll burden'+(r.pw&&!pwRates().cash?' (burden on base only, fringe to plans)':'')+'</span><b>'+money(r.laborCost)+'</b></div>'
+        +'<div class="bl"><span>Crew labor: '+r.manHrs.toFixed(1)+' labor-hrs ('+r.crew+' crew x '+r.clockHrs.toFixed(1)+' hrs) @ '+r.wageLabel+' + '+(BURDEN*100)+'% payroll burden'+(r.pw&&!pwRates().cash?' (burden on base only, fringe to plans)':'')+'</span><b>'+money(r.techLabor)+'</b></div>'
+        +(r.supN?'<div class="bl"><span>Supervisor: '+r.supN+' x '+r.clockHrs.toFixed(1)+' hrs @ $'+r.supWage.toFixed(2)+' + '+(BURDEN*100)+'% burden</span><b>'+money(r.supCost)+'</b></div>':'')
         +(r.compCost?'<div class="bl"><span>Certified payroll compliance ('+(PW_COMPLIANCE*100)+'% of labor: WH-347 weekly or NV monthly)</span><b>'+money(r.compCost)+'</b></div>':'')
         +'<div class="bl"><span>Incidentals &amp; unlisted supplies ('+(INCIDENTALS*100)+'% of labor)</span><b>'+money(r.incCost)+'</b></div>'
         +r.chems.map(c=>'<div class="bl"><span>'+c.label+' ('+money2(c.perUnit)+uw+')</span><b>'+money(c.cost)+'</b></div>').join('')
@@ -769,7 +785,8 @@ function printQuote(internal){
     h+='<div class="p-svc"><span class="p-price">'+money(r.finalPrice)+'</span><h4>'+r.s.name+' | '+unitTxt+(r.sidesLabel?' | '+r.sidesLabel:'')+'</h4><p>'+r.s.desc+'</p>';
     if(internal){
       h+='<table class="p-table"><tr><th>Cost Line</th><th>Amount</th></tr>'
-      +'<tr><td>Crew labor '+r.manHrs.toFixed(1)+' labor-hrs @ '+r.wageLabel+' +'+(BURDEN*100)+'% burden</td><td>'+money(r.laborCost)+'</td></tr>'
+      +'<tr><td>Crew labor '+r.manHrs.toFixed(1)+' labor-hrs @ '+r.wageLabel+' +'+(BURDEN*100)+'% burden</td><td>'+money(r.techLabor)+'</td></tr>'
+      +(r.supN?'<tr><td>Supervisor '+r.supHrs.toFixed(1)+' hrs @ $'+r.supWage.toFixed(2)+' +'+(BURDEN*100)+'% burden</td><td>'+money(r.supCost)+'</td></tr>':'')
       +(r.compCost?'<tr><td>Certified payroll compliance</td><td>'+money(r.compCost)+'</td></tr>':'')
       +'<tr><td>Incidentals ('+(INCIDENTALS*100)+'% of labor)</td><td>'+money(r.incCost)+'</td></tr>'
       +r.chems.map(c=>'<tr><td>'+c.label+'</td><td>'+money(c.cost)+'</td></tr>').join('')
@@ -810,6 +827,7 @@ function applySnapshot(p){
 }
 let saveTimer=null;
 function autosaveSoon(){clearTimeout(saveTimer);saveTimer=setTimeout(()=>localSave(false),1200);}
+function resetAll(){clearTimeout(saveTimer);localStorage.removeItem('cwpc_current');location.reload();}
 function localSave(announce){
   localStorage.setItem('cwpc_current',JSON.stringify({ts:Date.now(),payload:snapshot()}));
   if(announce)alert('Saved locally.');
